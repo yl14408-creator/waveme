@@ -436,78 +436,80 @@ export async function recommendTemplate(
 }
 
 /**
- * 使用 Vision API 解析简历图片/PDF
- * 支持多页PDF（传入多张图片）
+ * 从纯文本中提取结构化简历数据（使用 DeepSeek chat API）
  */
-export async function parseResumeWithVision(
-  imageBase64List: string[],
-  options?: {
-    language?: 'zh' | 'en' | 'auto';
-    onProgress?: (progress: number) => void;
-  }
-): Promise<{
-  success: boolean;
-  data?: ResumeData;
-  error?: string;
-  rawText?: string;
-}> {
-  const { language = 'auto', onProgress } = options || {};
-
-  // 检查 API Key
+export async function extractResumeFromText(
+  resumeText: string
+): Promise<{ success: boolean; data?: ResumeData; error?: string }> {
   if (!DEEPSEEK_API_KEY) {
-    return {
-      success: false,
-      error: '未配置 DeepSeek API Key，请在设置中添加 API Key',
-    };
+    return { success: false, error: 'No DeepSeek API key configured' };
   }
+
+  const prompt = `You are a resume parser. Extract structured information from the following resume text and return ONLY a valid JSON object with no markdown, no code fences, no extra text.
+
+Required JSON structure:
+{
+  "name": "Full Name",
+  "title": "Current Job Title or Target Position",
+  "email": "email@example.com",
+  "phone": "phone number",
+  "location": "City, Country",
+  "website": "personal website URL or null",
+  "linkedin": "LinkedIn URL or null",
+  "github": "GitHub URL or null",
+  "summary": "Professional summary",
+  "experience": [
+    {
+      "id": "1",
+      "company": "Company Name",
+      "title": "Job Title",
+      "location": "City",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM or empty string if current",
+      "current": false,
+      "description": ["Key responsibility 1", "Key responsibility 2"],
+      "highlights": ["highlight1"]
+    }
+  ],
+  "education": [
+    {
+      "id": "1",
+      "school": "University Name",
+      "degree": "Degree Type",
+      "field": "Field of Study",
+      "location": "City",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM",
+      "gpa": null,
+      "achievements": []
+    }
+  ],
+  "skills": ["skill1", "skill2", "skill3"],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Project Name",
+      "description": "Project description",
+      "technologies": ["tech1", "tech2"],
+      "url": null
+    }
+  ],
+  "certifications": [],
+  "languages": [{"name": "Language", "level": "Proficiency"}],
+  "awards": []
+}
+
+Important rules:
+1. Date format must be YYYY-MM
+2. experience.description MUST be an array of strings
+3. If a field is not found, use null for optional strings, "" for required strings, or [] for arrays
+4. Each experience/education/project must have a unique "id" field (use "1", "2", "3"...)
+5. Preserve the original language of the resume content
+
+Resume text:
+${resumeText}`;
 
   try {
-    onProgress?.(30);
-
-    // 构建消息内容 - 包含多张图片
-    const content: Array<{type: 'text' | 'image_url', text?: string, image_url?: {url: string}}> = [
-      {
-        type: 'text',
-        text: `请分析这份简历${imageBase64List.length > 1 ? '（共' + imageBase64List.length + '页）' : ''}，提取以下信息并以 JSON 格式返回：
-
-需要提取的字段：
-- name: 姓名
-- title: 职位/头衔
-- email: 邮箱
-- phone: 电话
-- location: 地点
-- website: 个人网站
-- linkedin: LinkedIn 链接
-- github: GitHub 链接
-- summary: 个人简介
-- experience: 工作经历数组（company, title, location, startDate, endDate, current, description, highlights）
-- education: 教育经历数组（school, degree, field, location, startDate, endDate, gpa, achievements）
-- skills: 技能数组
-- projects: 项目数组（name, description, url, technologies）
-- certifications: 证书数组
-- languages: 语言数组（name, level）
-- awards: 获奖数组
-
-请确保：
-1. 日期格式统一为 YYYY-MM
-2. description 为字符串数组
-3. 如果某项信息不存在，使用 null 或空数组
-4. ${language === 'zh' ? '保持中文' : language === 'en' ? '保持英文' : '保持原始语言'}
-5. 仔细识别所有信息，确保准确
-
-直接返回 JSON，不要包含 markdown 代码块标记。`,
-      },
-      // 添加所有图片
-      ...imageBase64List.map(base64 => ({
-        type: 'image_url' as const,
-        image_url: {
-          url: `data:image/png;base64,${base64}`,
-        },
-      })),
-    ];
-
-    onProgress?.(50);
-
     const response = await fetch(DEEPSEEK_API_URL, {
       method: 'POST',
       headers: {
@@ -516,60 +518,39 @@ export async function parseResumeWithVision(
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
-        messages: [
-          { role: 'system', content: '你是一个专业的简历解析助手，擅长从图片中提取结构化信息。' },
-          { role: 'user', content },
-        ],
-        temperature: 0.2,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.1,
         max_tokens: 4000,
       }),
     });
 
-    onProgress?.(80);
-
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || 'Vision API 请求失败');
+      const err = await response.text();
+      return { success: false, error: `DeepSeek API error: ${err}` };
     }
 
-    const data = await response.json();
-    const content_text = data.choices[0]?.message?.content || '';
+    const result = await response.json();
+    const content = result.choices?.[0]?.message?.content ?? '';
 
-    // 解析 JSON 响应
-    const parsedData = extractJSONFromResponse(content_text);
-    
-    if (!parsedData) {
-      throw new Error('无法解析 AI 响应');
+    // Parse JSON from response
+    const parsed = extractJSONFromResponse(content);
+
+    if (!parsed) {
+      return { success: false, error: '无法解析 AI 响应' };
     }
 
-    onProgress?.(100);
-
-    // 标准化字段名，处理 AI 返回字段名与 ResumeData 不匹配的情况
-    const normalized = parsedData as Record<string, unknown>;
-    if (normalized.fullName && !normalized.name) {
-      normalized.name = normalized.fullName;
-    }
+    // Normalize common field name variants
+    const normalized = parsed as Record<string, unknown>;
+    if (normalized.fullName && !normalized.name) normalized.name = normalized.fullName;
     if ((normalized.jobTitle || normalized.position) && !normalized.title) {
       normalized.title = (normalized.jobTitle || normalized.position) as string;
     }
-    if (normalized.contactEmail && !normalized.email) {
-      normalized.email = normalized.contactEmail;
-    }
-    if (normalized.phoneNumber && !normalized.phone) {
-      normalized.phone = normalized.phoneNumber;
-    }
+    if (normalized.contactEmail && !normalized.email) normalized.email = normalized.contactEmail;
+    if (normalized.phoneNumber && !normalized.phone) normalized.phone = normalized.phoneNumber;
 
-    return {
-      success: true,
-      data: normalized as unknown as ResumeData,
-      rawText: content_text,
-    };
-  } catch (error) {
-    console.error('Vision API Error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Vision API 解析失败',
-    };
+    return { success: true, data: normalized as unknown as ResumeData };
+  } catch (e: any) {
+    return { success: false, error: `Parse error: ${e.message}` };
   }
 }
 

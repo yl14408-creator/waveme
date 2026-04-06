@@ -1,11 +1,17 @@
 /**
  * PDF 解析服务
- * 支持使用 OpenAI Vision API 进行真实解析
+ * 使用 pdf.js 文本提取 + DeepSeek chat API 进行解析
  */
 
+import * as pdfjsLib from 'pdfjs-dist';
 import type { ResumeData } from '@/types';
-import { parseResumeWithVision } from './aiService';
-import { convertPDFToImages } from './pdfToImage';
+import { extractResumeFromText } from './aiService';
+
+// Worker is configured in pdfToImage.ts but we need it here too
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).href;
 
 interface ParsePDFOptions {
   onProgress?: (progress: number) => void;
@@ -38,97 +44,80 @@ export function getFileSizeInfo(bytes: number): string {
 }
 
 /**
+ * 从 PDF 文件中提取纯文本
+ */
+export async function parsePDFToText(
+  file: File,
+  onProgress?: (pct: number) => void
+): Promise<string> {
+  onProgress?.(10);
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  onProgress?.(30);
+
+  let fullText = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      .map((item: any) => ('str' in item ? item.str : ''))
+      .join(' ');
+    fullText += pageText + '\n';
+    onProgress?.(30 + Math.round((i / pdf.numPages) * 40));
+  }
+
+  onProgress?.(70);
+  return fullText.trim();
+}
+
+/**
  * 解析 PDF 文件
- * 支持两种方式：
- * 1. 真实 API 解析（使用 OpenAI Vision API）
- * 2. 模拟解析（用于演示）
+ * 使用 pdf.js 提取文本，再通过 DeepSeek chat API 结构化解析
  */
 export async function parsePDF(
   file: File,
   options: ParsePDFOptions = {}
 ): Promise<ParsePDFResult> {
-  const { onProgress, language = 'auto', useRealAPI = true } = options;
+  const { onProgress } = options;
 
   // 检查文件类型
   if (!file.type.includes('pdf')) {
-    return {
-      success: false,
-      error: '请上传 PDF 文件',
-    };
+    return { success: false, error: '请上传 PDF 文件' };
   }
 
   // 检查文件大小（最大 10MB）
   if (file.size > 10 * 1024 * 1024) {
+    return { success: false, error: '文件大小超过 10MB 限制' };
+  }
+
+  try {
+    // 检查 API Key — fallback to mock if missing
+    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+    if (!apiKey) {
+      console.log('[pdfParser] No DeepSeek API key configured, using mock data');
+      return simulatePDFParsing(onProgress);
+    }
+
+    // Extract text from PDF
+    const text = await parsePDFToText(file, onProgress);
+
+    if (!text || text.length < 50) {
+      return { success: false, error: 'Could not extract text from PDF' };
+    }
+
+    onProgress?.(75);
+
+    // Extract structured data via DeepSeek
+    const result = await extractResumeFromText(text);
+    onProgress?.(100);
+    return result;
+  } catch (error) {
+    console.error('PDF Parse Error:', error);
     return {
       success: false,
-      error: '文件大小超过 10MB 限制',
+      error: error instanceof Error ? error.message : '解析失败，请重试',
     };
   }
-
-  // 如果使用真实 API
-  if (useRealAPI) {
-    try {
-      // 检查 API Key 是否配置，如果没有则使用模拟数据
-      const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
-      if (!apiKey) {
-        console.log('[pdfParser] No DeepSeek API key configured, using mock data');
-        return simulatePDFParsing(onProgress);
-      }
-
-      onProgress?.(10);
-
-      // 第一步：将 PDF 转换为图片
-      const conversionResult = await convertPDFToImages(file, {
-        scale: 2,
-        maxPages: 3, // 最多解析 3 页
-        onProgress: (currentPage, totalPages) => {
-          const progress = 10 + Math.round((currentPage / totalPages) * 30);
-          onProgress?.(progress);
-        },
-      });
-
-      if (!conversionResult.success) {
-        return {
-          success: false,
-          error: conversionResult.error || 'PDF 转换失败',
-        };
-      }
-
-      onProgress?.(40);
-
-      // 第二步：使用 Vision API 解析图片
-      const visionResult = await parseResumeWithVision(
-        conversionResult.images,
-        {
-          language,
-          onProgress: (progress) => {
-            onProgress?.(40 + Math.round(progress * 0.6));
-          },
-        }
-      );
-
-      if (!visionResult.success) {
-        return {
-          success: false,
-          error: visionResult.error || 'AI 解析失败',
-        };
-      }
-
-      return {
-        success: true,
-        data: visionResult.data,
-      };
-    } catch (error) {
-      console.error('PDF Parse Error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : '解析失败，请重试',
-      };
-    }
-  }
-
-  // 模拟解析（用于演示）
-  return simulatePDFParsing(onProgress);
 }
 
 /**
@@ -137,7 +126,6 @@ export async function parsePDF(
 async function simulatePDFParsing(
   onProgress?: (progress: number) => void
 ): Promise<ParsePDFResult> {
-  // 模拟解析过程
   const steps = [
     { progress: 10, message: '正在读取文件...' },
     { progress: 25, message: '正在提取文本...' },
@@ -152,7 +140,6 @@ async function simulatePDFParsing(
     onProgress?.(step.progress);
   }
 
-  // 返回模拟数据
   return {
     success: true,
     data: generateMockResumeData(),
