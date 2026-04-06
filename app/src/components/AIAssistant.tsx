@@ -107,7 +107,7 @@ export function AIAssistant({ isOpen, onClose, onSuggestion, currentTemplate }: 
 
       // 调用真实AI服务
       const response = await sendChatMessage(newHistory, {
-        model: 'gpt-4o-mini',
+        model: 'deepseek-chat',
         temperature: 0.7,
       });
 
@@ -133,10 +133,10 @@ export function AIAssistant({ isOpen, onClose, onSuggestion, currentTemplate }: 
           role: 'assistant',
           content: `⚠️ ${response.error}
 
-如果你想使用真实的 AI 功能，请配置 OpenAI API Key：
-1. 访问 https://platform.openai.com/api-keys 获取 API Key
+如果你想使用真实的 AI 功能，请配置 DeepSeek API Key：
+1. 访问 https://platform.deepseek.com/api-keys 获取 API Key
 2. 在项目根目录创建 .env 文件
-3. 添加 VITE_OPENAI_API_KEY=your_api_key_here
+3. 添加 VITE_DEEPSEEK_API_KEY=your_api_key_here
 4. 重启开发服务器
 
 目前我使用的是模拟回复模式，可以回答一些常见问题。`,

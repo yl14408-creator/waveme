@@ -68,6 +68,13 @@ export async function parsePDF(
   // 如果使用真实 API
   if (useRealAPI) {
     try {
+      // 检查 API Key 是否配置，如果没有则使用模拟数据
+      const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+      if (!apiKey) {
+        console.log('[pdfParser] No DeepSeek API key configured, using mock data');
+        return simulatePDFParsing(onProgress);
+      }
+
       onProgress?.(10);
 
       // 第一步：将 PDF 转换为图片
