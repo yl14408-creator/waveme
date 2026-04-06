@@ -286,6 +286,91 @@ const zhTranslations = {
   'templateShowcase.badge': '15+ 精选模板',
   'templateShowcase.preview': '预览模板',
   'templateShowcase.viewAll': '查看全部模板',
+
+  // Template Page
+  'template.select': '选择',
+  'template.selected': '已选择',
+  'template.preview': '预览',
+  'template.viewExample': '查看示例',
+  'template.continue': '继续编辑',
+  'template.style': '风格',
+  'template.features': '特性',
+
+  // Auth Page
+  'auth.login': '登录',
+  'auth.register': '注册',
+  'auth.email': '邮箱',
+  'auth.password': '密码',
+  'auth.confirmPassword': '确认密码',
+  'auth.forgotPassword': '忘记密码？',
+  'auth.noAccount': '没有账号？',
+  'auth.hasAccount': '已有账号？',
+  'auth.loginWithGoogle': '使用 Google 登录',
+  'auth.or': '或',
+  'auth.terms': '继续即表示你同意我们的服务条款和隐私政策',
+
+  // Domain Page
+  'domain.title': '自定义域名',
+  'domain.subtitle': '使用你自己的域名，看起来更专业',
+  'domain.search': '搜索域名',
+  'domain.available': '可用',
+  'domain.registered': '已注册',
+  'domain.price': '价格',
+  'domain.select': '选择',
+  'domain.manage': '管理域名',
+
+  // Analytics
+  'analytics.totalViews': '总访问量',
+  'analytics.uniqueVisitors': '独立访客',
+  'analytics.avgTime': '平均停留',
+  'analytics.bounceRate': '跳出率',
+  'analytics.trafficSources': '流量来源',
+  'analytics.sectionDwell': '模块停留时间',
+  'analytics.recentVisitors': '最近访客',
+  'analytics.insight': '洞察',
+  'analytics.refresh': '刷新',
+  'analytics.export': '导出报告',
+  'analytics.share': '分享',
+
+  // Status
+  'status.online': '在线',
+  'status.offline': '离线',
+  'status.warning': '警告',
+  'status.processing': '处理中',
+
+  // Common Actions
+  'action.copy': '复制',
+  'action.copied': '已复制！',
+  'action.save': '保存',
+  'action.edit': '编辑',
+  'action.delete': '删除',
+  'action.cancel': '取消',
+  'action.confirm': '确认',
+  'action.apply': '应用',
+  'action.reset': '重置',
+  'action.filter': '筛选',
+  'action.sort': '排序',
+  'action.search': '搜索',
+  'action.clear': '清除',
+  'action.loadMore': '加载更多',
+  'action.viewAll': '查看全部',
+  'action.seeMore': '查看更多',
+  'action.seeLess': '收起',
+  'action.expand': '展开',
+  'action.collapse': '折叠',
+  'action.show': '显示',
+  'action.hide': '隐藏',
+
+  // Time
+  'time.justNow': '刚刚',
+  'time.minutesAgo': '{{minutes}} 分钟前',
+  'time.hoursAgo': '{{hours}} 小时前',
+  'time.daysAgo': '{{days}} 天前',
+  'time.today': '今天',
+  'time.yesterday': '昨天',
+  'time.thisWeek': '本周',
+  'time.thisMonth': '本月',
+  'time.lastMonth': '上个月',
 };
 
 const enTranslations: Record<string, string> = {

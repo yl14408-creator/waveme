@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { WavemeV3Landing } from '@/sections/WavemeV3Landing';
 import { UploadPage } from '@/sections/UploadPage';
@@ -15,11 +15,25 @@ import { Toaster } from '@/components/ui/sonner';
 import { I18nProvider } from '@/i18n/index.tsx';
 import { downloadHTML } from '@/services/templates-v2';
 import type { ResumeData } from '@/types';
+import { onAuthStateChange, getCurrentUser, type AuthUser } from '@/services/auth';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('ink-landscape');
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    // Check for existing session on mount (handles OAuth redirect)
+    getCurrentUser().then((u) => setUser(u));
+    // Listen for future auth state changes
+    const unsubscribe = onAuthStateChange((authUser: AuthUser | null) => {
+      setUser(authUser);
+    });
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, []);
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page);
@@ -74,7 +88,7 @@ function App() {
       case 'analytics':
         return <AnalyticsDashboard />;
       case 'auth':
-        return <AuthPage onNavigate={handleNavigate} />;
+        return <AuthPage onNavigate={handleNavigate} onLogin={setUser} />;
       case 'pricing':
         return <PricingPage onNavigate={handleNavigate} />;
       case 'faq':

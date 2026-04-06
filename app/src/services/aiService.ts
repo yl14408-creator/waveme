@@ -551,9 +551,24 @@ export async function parseResumeWithVision(
 
     onProgress?.(100);
 
+    // 标准化字段名，处理 AI 返回字段名与 ResumeData 不匹配的情况
+    const normalized = parsedData as Record<string, unknown>;
+    if (normalized.fullName && !normalized.name) {
+      normalized.name = normalized.fullName;
+    }
+    if ((normalized.jobTitle || normalized.position) && !normalized.title) {
+      normalized.title = (normalized.jobTitle || normalized.position) as string;
+    }
+    if (normalized.contactEmail && !normalized.email) {
+      normalized.email = normalized.contactEmail;
+    }
+    if (normalized.phoneNumber && !normalized.phone) {
+      normalized.phone = normalized.phoneNumber;
+    }
+
     return {
       success: true,
-      data: parsedData as ResumeData,
+      data: normalized as unknown as ResumeData,
       rawText: content_text,
     };
   } catch (error) {

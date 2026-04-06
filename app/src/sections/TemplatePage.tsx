@@ -93,11 +93,27 @@ export function TemplatePage({
   };
 
   const handleContinue = () => {
-    onNavigate('editor');
+    if (resumeData) {
+      onNavigate('editor');
+    } else {
+      onNavigate('upload');
+    }
   };
 
-  if (previewTemplate && resumeData) {
-    const previewHTML = generateTemplateHTMLV2(previewTemplate.id, resumeData);
+  if (previewTemplate) {
+    const sampleData: ResumeData = {
+      name: 'Alex Chen',
+      title: 'Software Engineer',
+      email: 'alex@example.com',
+      phone: '555-0123',
+      location: 'San Francisco, CA',
+      summary: 'Passionate software engineer with 5+ years of experience.',
+      experience: [],
+      education: [],
+      skills: ['React', 'TypeScript', 'Node.js'],
+      projects: [],
+    };
+    const previewHTML = generateTemplateHTMLV2(previewTemplate.id, resumeData || sampleData);
     
     const frameWidth = {
       desktop: '100%',
@@ -528,7 +544,9 @@ export function TemplatePage({
               onClick={handleContinue}
               className="bg-stone-700 hover:bg-stone-800 text-white px-10 py-6 text-lg rounded-xl shadow-lg"
             >
-              {language === 'en' ? 'Continue Editing' : '继续编辑'}
+              {resumeData
+                ? (language === 'en' ? 'Continue Editing' : '继续编辑')
+                : (language === 'en' ? 'Upload Resume First' : '先上传简历')}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </motion.div>
