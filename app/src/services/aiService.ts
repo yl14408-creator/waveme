@@ -1,13 +1,6 @@
 /**
  * Waveme AI 服务
- * 接入 OpenAI API 实现真实的 AI 对话和建议
- * 
- * 成本说明：
- * - GPT-4o-mini: $0.15 / 1M input tokens, $0.60 / 1M output tokens
- * - GPT-4o: $2.50 / 1M input tokens, $10.00 / 1M output tokens
- * - GPT-4o Vision: $0.075 / 1K tokens (输入图片)
- * 
- * 建议：使用 GPT-4o-mini 进行日常对话，成本极低
+ * 接入 DeepSeek API 实现真实的 AI 对话和建议
  */
 
 import type { ResumeData } from '@/types';
@@ -31,9 +24,9 @@ export interface AIChatResponse {
   error?: string;
 }
 
-// OpenAI API 配置
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '';
-const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+// DeepSeek API 配置
+const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 
 // 系统提示词
 const SYSTEM_PROMPT = `你是 Waveme AI 助手，一个专注于帮助用户打造个人品牌网站的智能助手。
@@ -59,35 +52,35 @@ Waveme 的核心理念是"上善若水"：
 当用户询问内容优化时，请给出具体的修改建议。`;
 
 /**
- * 发送聊天消息到 OpenAI API
+ * 发送聊天消息到 DeepSeek API
  */
 export async function sendChatMessage(
   messages: AIChatMessage[],
   options?: {
-    model?: 'gpt-4o-mini' | 'gpt-4o';
+    model?: 'deepseek-chat' | 'deepseek-reasoner';
     temperature?: number;
   }
 ): Promise<AIChatResponse> {
-  const { model = 'gpt-4o-mini', temperature = 0.7 } = options || {};
+  const { model = 'deepseek-chat', temperature = 0.7 } = options || {};
 
   // 检查 API Key
-  if (!OPENAI_API_KEY) {
+  if (!DEEPSEEK_API_KEY) {
     // 如果没有配置 API Key，使用模拟响应
-    console.log('No OpenAI API Key found, using mock response');
+    console.log('No DeepSeek API Key found, using mock response');
     const mockResponse = generateMockResponse(messages);
     // 添加一个提示，告诉用户这是模拟模式
     if (mockResponse.message && !mockResponse.message.includes('模拟模式')) {
-      mockResponse.message = `[模拟模式] ${mockResponse.message}\n\n---\n💡 提示：当前使用的是模拟回复。如需真实 AI 功能，请配置 VITE_OPENAI_API_KEY 环境变量。`;
+      mockResponse.message = `[模拟模式] ${mockResponse.message}\n\n---\n💡 提示：当前使用的是模拟回复。如需真实 AI 功能，请配置 VITE_DEEPSEEK_API_KEY 环境变量。`;
     }
     return mockResponse;
   }
 
   try {
-    const response = await fetch(OPENAI_API_URL, {
+    const response = await fetch(DEEPSEEK_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       },
       body: JSON.stringify({
         model,
@@ -461,10 +454,10 @@ export async function parseResumeWithVision(
   const { language = 'auto', onProgress } = options || {};
 
   // 检查 API Key
-  if (!OPENAI_API_KEY) {
+  if (!DEEPSEEK_API_KEY) {
     return {
       success: false,
-      error: '未配置 OpenAI API Key，请在设置中添加 API Key',
+      error: '未配置 DeepSeek API Key，请在设置中添加 API Key',
     };
   }
 
@@ -515,14 +508,14 @@ export async function parseResumeWithVision(
 
     onProgress?.(50);
 
-    const response = await fetch(OPENAI_API_URL, {
+    const response = await fetch(DEEPSEEK_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'deepseek-chat',
         messages: [
           { role: 'system', content: '你是一个专业的简历解析助手，擅长从图片中提取结构化信息。' },
           { role: 'user', content },
@@ -580,4 +573,4 @@ export async function parseResumeWithVision(
   }
 }
 
-export { OPENAI_API_KEY };
+export { DEEPSEEK_API_KEY };
