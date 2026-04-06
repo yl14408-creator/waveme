@@ -6,8 +6,11 @@
 import * as pdfjsLib from 'pdfjs-dist';
 
 // 设置 pdf.js worker
-// 使用 CDN 版本的 worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// 使用本地 pdfjs-dist 包的 worker（CDN 上没有 v5.x 版本）
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
+).href;
 
 interface PDFToImageOptions {
   scale?: number; // 缩放比例，默认 2（相当于 144 DPI）
