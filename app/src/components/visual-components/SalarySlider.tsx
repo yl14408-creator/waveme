@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { useI18n } from '@/i18n';
 
 interface SalarySliderProps {
   min: number;
@@ -23,6 +24,7 @@ export function SalarySlider({
   readOnly = false,
   color = '#06b6d4',
 }: SalarySliderProps) {
+  const { t } = useI18n();
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const displayValue = hoverValue ?? value;
   const percentage = ((displayValue - min) / (max - min)) * 100;
@@ -56,13 +58,13 @@ export function SalarySlider({
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <DollarSign className="w-5 h-5" style={{ color }} />
-          <h3 className="font-semibold text-gray-900">期望薪资</h3>
+          <h3 className="font-semibold text-gray-900">{t('components.demo.expectedSalary')}</h3>
         </div>
         <div className="text-right">
           <span className="text-2xl font-bold" style={{ color }}>
             {currency} {displayValue.toLocaleString()}
           </span>
-          <span className="text-sm text-gray-500"> /月</span>
+          <span className="text-sm text-gray-500"> {t('components.demo.perMonth')}</span>
         </div>
       </div>
 
@@ -83,7 +85,7 @@ export function SalarySlider({
             style={{ left: `${((industryAverage - min) / (max - min)) * 100}%` }}
           >
             <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-              <span className="text-xs text-amber-600 font-medium">行业平均</span>
+              <span className="text-xs text-amber-600 font-medium">{t('components.demo.industryAverage')}</span>
             </div>
           </div>
         )}
@@ -117,21 +119,21 @@ export function SalarySlider({
           <div className="flex-1 p-3 bg-gray-50 rounded-lg">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Info className="w-4 h-4" />
-              与行业平均对比
+              {t('components.demo.vsIndustryAvg')}
             </div>
             <div className="mt-1 flex items-baseline gap-2">
               {value > industryAverage ? (
                 <>
                   <TrendingUp className="w-4 h-4 text-green-500" />
                   <span className="text-green-600 font-medium">
-                    高于平均 {((value - industryAverage) / industryAverage * 100).toFixed(0)}%
+                    {t('components.demo.aboveAvg')} {((value - industryAverage) / industryAverage * 100).toFixed(0)}%
                   </span>
                 </>
               ) : (
                 <>
                   <TrendingDown className="w-4 h-4 text-amber-500" />
                   <span className="text-amber-600 font-medium">
-                    低于平均 {((industryAverage - value) / industryAverage * 100).toFixed(0)}%
+                    {t('components.demo.belowAvg')} {((industryAverage - value) / industryAverage * 100).toFixed(0)}%
                   </span>
                 </>
               )}

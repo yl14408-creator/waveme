@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { GraduationCap, Award, TrendingUp } from 'lucide-react';
 import { ProgressBar } from './ProgressBar';
+import { useI18n } from '@/i18n';
 
 interface Education {
   id: string;
@@ -29,6 +30,7 @@ export function EducationCard({
   showRanking = true,
   layout = 'cards',
 }: EducationCardProps) {
+  const { t } = useI18n();
   if (layout === 'timeline') {
     return (
       <div className="relative">
@@ -141,7 +143,7 @@ export function EducationCard({
             {(showRanking && edu.ranking) && (
               <div className="mt-3 flex items-center gap-2 text-sm">
                 <TrendingUp className="w-4 h-4 text-green-500" />
-                <span className="text-gray-600">排名: {edu.ranking}</span>
+                <span className="text-gray-600">{t('components.demo.ranking')}: {edu.ranking}</span>
               </div>
             )}
             

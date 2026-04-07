@@ -43,7 +43,7 @@ interface ComponentsPageProps {
   onNavigate: (page: string) => void;
 }
 
-// Stone色系的颜色配置
+// Stone color palette
 const STONE_COLORS = {
   primary: '#57534e',
   secondary: '#78716c',
@@ -60,60 +60,7 @@ const componentCategoryDefs = [
   { id: 'dashboard', nameKey: 'components.category.dashboard', icon: <Activity className="w-5 h-5" /> },
 ];
 
-const sampleEducation = [
-  {
-    id: '1',
-    school: '浙江大学',
-    degree: '本科',
-    field: '计算机科学与技术',
-    startDate: '2012-09',
-    endDate: '2016-06',
-    gpa: 3.8,
-    maxGpa: 4.0,
-    achievements: ['国家奖学金获得者', 'ACM竞赛省级一等奖', '优秀毕业生']
-  }
-];
-
-const samplePhotos = [
-  { id: '1', src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop', caption: '电商平台首页' },
-  { id: '2', src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop', caption: '数据可视化大屏' },
-  { id: '3', src: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop', caption: '移动端应用' },
-  { id: '4', src: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&h=300&fit=crop', caption: '后台管理系统' },
-];
-
-const sampleLocations = [
-  { id: '1', name: '上海', country: '中国', type: 'work' as const },
-  { id: '2', name: '杭州', country: '中国', type: 'work' as const },
-  { id: '3', name: '北京', country: '中国', type: 'education' as const },
-];
-
-const sampleAchievements = [
-  { id: '1', title: '开源贡献者', description: 'GitHub Star 超过 1000', metric: { value: 1200, unit: 'Stars', change: 15 }, icon: 'trophy' as const, color: STONE_COLORS.primary },
-  { id: '2', title: '技术博主', description: '发布 50+ 技术文章', metric: { value: 58, unit: '篇', change: 8 }, icon: 'star' as const, color: STONE_COLORS.secondary },
-  { id: '3', title: '社区活跃', description: '回答问题 500+', metric: { value: 523, unit: '个', change: 12 }, icon: 'zap' as const, color: STONE_COLORS.accent },
-];
-
-const sampleExpectationData = {
-  salary: {
-    min: 20000,
-    max: 35000,
-    expected: 28000,
-    currency: '¥',
-    industryAverage: 25000
-  },
-  location: {
-    preferred: ['上海', '杭州', '深圳'],
-    willingToRelocate: true
-  },
-  position: {
-    title: '高级前端工程师',
-    level: 'P7'
-  },
-  availability: {
-    noticePeriod: '1个月',
-    earliestStart: '2026-02-01'
-  }
-};
+// Sample data is generated via getSampleData() inside the component to support i18n
 
 export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
   const { t } = useI18n();
@@ -122,12 +69,67 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const sampleEducation = [
+    {
+      id: '1',
+      school: t('components.demo.sampleSchool'),
+      degree: t('components.demo.sampleDegree'),
+      field: t('components.demo.sampleField'),
+      startDate: '2012-09',
+      endDate: '2016-06',
+      gpa: 3.8,
+      maxGpa: 4.0,
+      achievements: [t('components.demo.sampleAchievement1'), t('components.demo.sampleAchievement2'), t('components.demo.sampleAchievement3')]
+    }
+  ];
+
+  const samplePhotos = [
+    { id: '1', src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop', caption: t('components.demo.photoCaption1') },
+    { id: '2', src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop', caption: t('components.demo.photoCaption2') },
+    { id: '3', src: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop', caption: t('components.demo.photoCaption3') },
+    { id: '4', src: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&h=300&fit=crop', caption: t('components.demo.photoCaption4') },
+  ];
+
+  const sampleLocations = [
+    { id: '1', name: t('components.demo.locationShanghai'), country: t('components.demo.countryChina'), type: 'work' as const },
+    { id: '2', name: t('components.demo.locationHangzhou'), country: t('components.demo.countryChina'), type: 'work' as const },
+    { id: '3', name: t('components.demo.locationBeijing'), country: t('components.demo.countryChina'), type: 'education' as const },
+  ];
+
+  const sampleAchievements = [
+    { id: '1', title: t('components.demo.achievement1Title'), description: t('components.demo.achievement1Desc'), metric: { value: 1200, unit: 'Stars', change: 15 }, icon: 'trophy' as const, color: STONE_COLORS.primary },
+    { id: '2', title: t('components.demo.achievement2Title'), description: t('components.demo.achievement2Desc'), metric: { value: 58, unit: t('components.demo.achievement2Unit'), change: 8 }, icon: 'star' as const, color: STONE_COLORS.secondary },
+    { id: '3', title: t('components.demo.achievement3Title'), description: t('components.demo.achievement3Desc'), metric: { value: 523, unit: t('components.demo.achievement3Unit'), change: 12 }, icon: 'zap' as const, color: STONE_COLORS.accent },
+  ];
+
+  const sampleExpectationData = {
+    salary: {
+      min: 20000,
+      max: 35000,
+      expected: 28000,
+      currency: '¥',
+      industryAverage: 25000
+    },
+    location: {
+      preferred: [t('components.demo.sampleCity1'), t('components.demo.sampleCity2'), t('components.demo.sampleCity3')],
+      willingToRelocate: true
+    },
+    position: {
+      title: t('components.demo.samplePosition'),
+      level: 'P7'
+    },
+    availability: {
+      noticePeriod: t('components.demo.sampleNoticePeriod'),
+      earliestStart: '2026-02-01'
+    }
+  };
+
   const componentCategories = componentCategoryDefs.map(c => ({
     ...c,
     name: t(c.nameKey),
   }));
 
-  // 加载真实数据
+  // Load real data
   useEffect(() => {
     loadAnalyticsData();
   }, []);
@@ -189,12 +191,12 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 <PieChart className="w-5 h-5 text-stone-600" />
                 {t('components.section.funnelChart')}
               </h3>
-              <FunnelChart 
+              <FunnelChart
                 data={[
-                  { name: '访问', value: 10000, color: STONE_COLORS.primary },
-                  { name: '浏览项目', value: 6500, color: STONE_COLORS.secondary },
-                  { name: '查看联系', value: 3200, color: STONE_COLORS.accent },
-                  { name: '发送邮件', value: 1200, color: STONE_COLORS.light },
+                  { name: t('components.demo.funnelVisits'), value: 10000, color: STONE_COLORS.primary },
+                  { name: t('components.demo.funnelBrowse'), value: 6500, color: STONE_COLORS.secondary },
+                  { name: t('components.demo.funnelContact'), value: 3200, color: STONE_COLORS.accent },
+                  { name: t('components.demo.funnelEmail'), value: 1200, color: STONE_COLORS.light },
                 ]}
               />
             </div>
@@ -242,9 +244,9 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 {t('components.section.comparisonTags')}
               </h3>
               <div className="flex flex-wrap gap-3">
-                <ComparisonTag value={23.5} label="vs 上月" />
-                <ComparisonTag value={-5.2} label="vs 上周" />
-                <ComparisonTag value={0} label="持平" />
+                <ComparisonTag value={23.5} label={t('components.demo.comparisonVsLastMonth')} />
+                <ComparisonTag value={-5.2} label={t('components.demo.comparisonVsLastWeek')} />
+                <ComparisonTag value={0} label={t('components.demo.comparisonFlat')} />
               </div>
             </div>
           </div>
@@ -290,26 +292,26 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 {t('components.section.timeline')}
               </h3>
               <div className="space-y-0">
-                <TimelineItem 
-                  title="高级前端工程师"
-                  company="字节跳动"
+                <TimelineItem
+                  title={t('components.demo.timelineTitle1')}
+                  company={t('components.demo.timelineCompany1')}
                   startDate="2021-03"
                   current
-                  description={['负责抖音创作者平台前端架构设计']}
+                  description={[t('components.demo.timelineDesc1')]}
                 />
-                <TimelineItem 
-                  title="前端工程师"
-                  company="阿里巴巴"
+                <TimelineItem
+                  title={t('components.demo.timelineTitle2')}
+                  company={t('components.demo.timelineCompany2')}
                   startDate="2018-07"
                   endDate="2021-02"
-                  description={['参与淘宝商家后台系统开发']}
+                  description={[t('components.demo.timelineDesc2')]}
                 />
-                <TimelineItem 
-                  title="初级前端工程师"
-                  company="美团"
+                <TimelineItem
+                  title={t('components.demo.timelineTitle3')}
+                  company={t('components.demo.timelineCompany3')}
                   startDate="2016-06"
                   endDate="2018-06"
-                  description={['负责商家端H5页面开发']}
+                  description={[t('components.demo.timelineDesc3')]}
                 />
               </div>
             </div>
@@ -356,7 +358,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
               </Button>
             </div>
 
-            {/* Metric Cards - 使用真实数据 */}
+            {/* Metric Cards - uses real data */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-stone-600" />
@@ -380,7 +382,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 <MetricCard
                   title={t('analytics.dashboard.avgStay')}
                   value={analyticsData ? parseInt(analyticsData.avgDwellTime) : 222}
-                  suffix="秒"
+                  suffix={t('components.demo.seconds')}
                   change={analyticsData?.dwellTimeChange || 12.8}
                   icon={<Clock className="w-5 h-5" />}
                   iconBg="bg-stone-400"
@@ -404,10 +406,10 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 {t('components.section.statusIndicators')}
               </h3>
               <div className="flex flex-wrap gap-4">
-                <StatusIndicator status="online" label="网站在线" />
-                <StatusIndicator status="warning" label="维护模式" />
-                <StatusIndicator status="offline" label="服务异常" />
-                <StatusIndicator status="processing" label="处理中" />
+                <StatusIndicator status="online" label={t('components.demo.statusOnline')} />
+                <StatusIndicator status="warning" label={t('components.demo.statusMaintenance')} />
+                <StatusIndicator status="offline" label={t('components.demo.statusError')} />
+                <StatusIndicator status="processing" label={t('components.demo.statusProcessing')} />
               </div>
             </div>
 
@@ -417,18 +419,18 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
                 <Clock className="w-5 h-5 text-stone-600" />
                 {t('components.section.heatmap')}
               </h3>
-              <Heatmap 
+              <Heatmap
                 data={[
-                  { x: '周一', y: '上午', value: 3 },
-                  { x: '周一', y: '下午', value: 5 },
-                  { x: '周二', y: '上午', value: 4 },
-                  { x: '周二', y: '下午', value: 6 },
-                  { x: '周三', y: '上午', value: 7 },
-                  { x: '周四', y: '下午', value: 5 },
-                  { x: '周五', y: '晚上', value: 8 },
-                ]} 
-                xLabels={['周一', '周二', '周三', '周四', '周五']}
-                yLabels={['上午', '下午', '晚上']}
+                  { x: t('components.demo.heatmapMon'), y: t('components.demo.heatmapMorning'), value: 3 },
+                  { x: t('components.demo.heatmapMon'), y: t('components.demo.heatmapAfternoon'), value: 5 },
+                  { x: t('components.demo.heatmapTue'), y: t('components.demo.heatmapMorning'), value: 4 },
+                  { x: t('components.demo.heatmapTue'), y: t('components.demo.heatmapAfternoon'), value: 6 },
+                  { x: t('components.demo.heatmapWed'), y: t('components.demo.heatmapMorning'), value: 7 },
+                  { x: t('components.demo.heatmapThu'), y: t('components.demo.heatmapAfternoon'), value: 5 },
+                  { x: t('components.demo.heatmapFri'), y: t('components.demo.heatmapEvening'), value: 8 },
+                ]}
+                xLabels={[t('components.demo.heatmapMon'), t('components.demo.heatmapTue'), t('components.demo.heatmapWed'), t('components.demo.heatmapThu'), t('components.demo.heatmapFri')]}
+                yLabels={[t('components.demo.heatmapMorning'), t('components.demo.heatmapAfternoon'), t('components.demo.heatmapEvening')]}
                 colorScale={['#f5f5f4', '#e7e5e4', '#d6d3d1', '#a8a29e', '#78716c', '#57534e']}
               />
             </div>

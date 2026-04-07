@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import { useI18n } from '@/i18n';
 
 interface Skill {
   name: string;
@@ -27,6 +28,7 @@ export function RadarSkills({
   showLegend = true,
   color = '#06b6d4',
 }: RadarSkillsProps) {
+  const { t } = useI18n();
   const sizeClasses = {
     sm: 'h-48',
     md: 'h-64',
@@ -41,7 +43,7 @@ export function RadarSkills({
 
   return (
     <div className="bg-white rounded-2xl border p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">技能雷达</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('components.demo.skillsRadar')}</h3>
       
       <div className={sizeClasses[size]}>
         <ResponsiveContainer width="100%" height="100%">
@@ -57,7 +59,7 @@ export function RadarSkills({
               tick={{ fill: '#9ca3af', fontSize: 10 }}
             />
             <Radar
-              name="技能水平"
+              name={t('components.demo.skillLevel')}
               dataKey="level"
               stroke={color}
               strokeWidth={2}
