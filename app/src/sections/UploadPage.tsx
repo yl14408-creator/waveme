@@ -111,13 +111,21 @@ export function UploadPage({ onNavigate, onResumeData }: UploadPageProps) {
           fileName: file.name,
         });
 
+        // Show warning for image-based PDFs
+        if (result.warning === 'image_pdf') {
+          setUploadState((prev) => ({
+            ...prev,
+            error: t('upload.imagePdfWarning'),
+          }));
+        }
+
         // 传递解析的数据
         onResumeData(result.data);
 
         // 延迟后跳转到模板选择页面
         setTimeout(() => {
           onNavigate('templates');
-        }, 1500);
+        }, result.warning === 'image_pdf' ? 3000 : 1500);
       } else {
         setUploadState({
           status: 'error',
@@ -311,7 +319,7 @@ export function UploadPage({ onNavigate, onResumeData }: UploadPageProps) {
                       <div className="flex items-center gap-2 mb-6 px-4 py-2 bg-[#f5f3f0] rounded-lg">
                         <FileText className="w-4 h-4 text-[#8c8c8c]" />
                         <span className="text-sm text-[#6a6a6a]">
-                          最大支持 {(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}MB
+                          {t('upload.maxSize')}
                         </span>
                       </div>
                       <Button
@@ -359,6 +367,11 @@ export function UploadPage({ onNavigate, onResumeData }: UploadPageProps) {
                       <p className="text-[#7a9a7c] mb-2">
                         {t('upload.status.success') || '成功解析'} <strong>{uploadState.fileName}</strong>
                       </p>
+                      {uploadState.error && (
+                        <p className="text-[#c4a248] text-sm mb-2">
+                          {uploadState.error}
+                        </p>
+                      )}
                       <p className="text-[#8c8c8c] text-sm">
                         {t('common.loading') || '正在跳转...'}
                       </p>

@@ -137,6 +137,8 @@ const zhTranslations = {
   'upload.tips.pdf': '确保PDF中的文字可以被选中（不是扫描件图片）',
   'upload.tips.format': '简历格式越规范，解析效果越好',
   'upload.tips.edit': '解析完成后可以在编辑器中修改和调整内容',
+  'upload.maxSize': '最大支持 10MB',
+  'upload.imagePdfWarning': '您的 PDF 似乎是图片格式，我们已加载示例数据，请手动编辑您的信息。',
   
   // 隐私
   'privacy.title': '隐私保护',
@@ -722,6 +724,8 @@ const enTranslations: Record<string, string> = {
   'upload.tips.pdf': 'Ensure PDF text is selectable (not scanned image)',
   'upload.tips.format': 'The more standardized the format, the better the parsing',
   'upload.tips.edit': 'You can edit and adjust content after parsing',
+  'upload.maxSize': 'Max 10MB',
+  'upload.imagePdfWarning': 'Your PDF appears to be image-based. We\'ve loaded sample data — please edit your information manually.',
   
   // Privacy
   'privacy.title': 'Privacy Protection',
