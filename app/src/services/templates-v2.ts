@@ -12,6 +12,7 @@ export interface TemplateV2 {
   category: TemplateCategory;
   style: TemplateStyle;
   description: string;
+  descriptionEn: string;
   previewImage: string;
   colors: {
     primary: string;
@@ -25,6 +26,7 @@ export interface TemplateV2 {
     body: string;
   };
   features: string[];
+  featuresEn: string[];
   navigation: ('home' | 'about' | 'projects' | 'experience' | 'skills' | 'blog' | 'contact' | 'research' | 'publications' | 'teaching' | 'students' | 'articles' | 'stats')[];
 }
 
@@ -37,6 +39,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'tech',
     style: 'retro',
     description: '复古终端风格，适合程序员展示技术栈',
+    descriptionEn: 'Retro terminal style, ideal for developers to showcase their tech stack',
     previewImage: '/templates/terminal.jpg',
     colors: {
       primary: '#4a7c59',
@@ -50,6 +53,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"JetBrains Mono", monospace',
     },
     features: ['终端动画', '打字机效果', '命令行交互', '代码高亮'],
+    featuresEn: ['Terminal animation', 'Typewriter effect', 'CLI interaction', 'Code highlighting'],
     navigation: ['home', 'projects', 'skills', 'experience', 'contact'],
   },
   {
@@ -58,6 +62,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'tech',
     style: 'bold',
     description: '赛博朋克风格，霓虹灯效果，未来感十足',
+    descriptionEn: 'Cyberpunk style with neon lights and a futuristic feel',
     previewImage: '/templates/cyberpunk.jpg',
     colors: {
       primary: '#7a5a8a',
@@ -71,6 +76,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Rajdhani", sans-serif',
     },
     features: ['霓虹发光', '网格背景', '故障艺术', '动态粒子'],
+    featuresEn: ['Neon glow', 'Grid background', 'Glitch art', 'Dynamic particles'],
     navigation: ['home', 'about', 'projects', 'skills', 'contact'],
   },
   {
@@ -79,6 +85,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'tech',
     style: 'minimal',
     description: '干净简洁的代码风格，专注内容展示',
+    descriptionEn: 'Clean and minimal code style, focused on content display',
     previewImage: '/templates/clean-code.jpg',
     colors: {
       primary: '#57534e',
@@ -92,6 +99,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Inter", sans-serif',
     },
     features: ['极简设计', '代码片段展示', 'GitHub 集成', '技能进度条'],
+    featuresEn: ['Minimal design', 'Code snippets', 'GitHub integration', 'Skill progress bars'],
     navigation: ['home', 'projects', 'experience', 'skills', 'blog', 'contact'],
   },
 
@@ -102,6 +110,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'design',
     style: 'elegant',
     description: '专业设计师作品集，大图展示，视觉冲击力强',
+    descriptionEn: 'Professional designer portfolio with large images and visual impact',
     previewImage: '/templates/portfolio-pro.jpg',
     colors: {
       primary: '#1a1a1a',
@@ -115,6 +124,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Inter", sans-serif',
     },
     features: ['大图展示', '瀑布流布局', '灯箱效果', '项目分类'],
+    featuresEn: ['Large images', 'Masonry layout', 'Lightbox effect', 'Project categories'],
     navigation: ['home', 'projects', 'about', 'contact'],
   },
   {
@@ -123,6 +133,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'design',
     style: 'bold',
     description: '粗野主义风格，大胆排版，打破常规',
+    descriptionEn: 'Brutalist style with bold typography that breaks conventions',
     previewImage: '/templates/brutalist.jpg',
     colors: {
       primary: '#8a5a5a',
@@ -136,6 +147,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Courier New", monospace',
     },
     features: ['大胆排版', '高对比度', '几何图形', '不规则布局'],
+    featuresEn: ['Bold typography', 'High contrast', 'Geometric shapes', 'Irregular layout'],
     navigation: ['home', 'projects', 'about', 'contact'],
   },
   {
@@ -144,6 +156,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'design',
     style: 'minimal',
     description: '北欧简约风，温暖色调，舒适自然',
+    descriptionEn: 'Scandinavian minimalism with warm tones and natural comfort',
     previewImage: '/templates/scandinavian.jpg',
     colors: {
       primary: '#d4a574',
@@ -157,6 +170,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Source Sans Pro", sans-serif',
     },
     features: ['温暖色调', '自然元素', '留白艺术', '柔和阴影'],
+    featuresEn: ['Warm tones', 'Natural elements', 'White space art', 'Soft shadows'],
     navigation: ['home', 'about', 'projects', 'blog', 'contact'],
   },
 
@@ -167,6 +181,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'creative',
     style: 'playful',
     description: '像素艺术风格，复古游戏感，个性十足',
+    descriptionEn: 'Pixel art style with retro gaming vibes and personality',
     previewImage: '/templates/pixel-art.jpg',
     colors: {
       primary: '#8a6a6a',
@@ -180,6 +195,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"VT323", monospace',
     },
     features: ['像素动画', '8-bit 音乐', '游戏化交互', '复古配色'],
+    featuresEn: ['Pixel animation', '8-bit music', 'Gamified interaction', 'Retro palette'],
     navigation: ['home', 'about', 'projects', 'skills', 'contact'],
   },
   {
@@ -188,6 +204,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'creative',
     style: 'playful',
     description: '手绘涂鸦风格，轻松活泼，展现个性',
+    descriptionEn: 'Hand-drawn doodle style, lighthearted and full of personality',
     previewImage: '/templates/doodle.jpg',
     colors: {
       primary: '#6366f1',
@@ -201,6 +218,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Comic Neue", cursive',
     },
     features: ['手绘元素', '涂鸦动画', '不规则边框', '贴纸效果'],
+    featuresEn: ['Hand-drawn elements', 'Doodle animation', 'Irregular borders', 'Sticker effects'],
     navigation: ['home', 'projects', 'blog', 'about', 'contact'],
   },
   {
@@ -209,6 +227,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'creative',
     style: 'bold',
     description: '拼贴艺术风格，层次丰富，视觉冲击',
+    descriptionEn: 'Collage art style with rich layers and visual impact',
     previewImage: '/templates/collage.jpg',
     colors: {
       primary: '#8a5a5a',
@@ -222,6 +241,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Roboto", sans-serif',
     },
     features: ['拼贴布局', '胶带效果', '照片叠加', '手写字体'],
+    featuresEn: ['Collage layout', 'Tape effect', 'Photo overlay', 'Handwritten fonts'],
     navigation: ['home', 'projects', 'about', 'contact'],
   },
 
@@ -232,6 +252,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'business',
     style: 'elegant',
     description: '高管精英风格，稳重专业，值得信赖',
+    descriptionEn: 'Executive elite style, reliable and professional',
     previewImage: '/templates/executive.jpg',
     colors: {
       primary: '#3a4a5f',
@@ -245,6 +266,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Lato", sans-serif',
     },
     features: ['经典布局', '金色点缀', '成就展示', '时间轴'],
+    featuresEn: ['Classic layout', 'Gold accents', 'Achievement display', 'Timeline'],
     navigation: ['home', 'experience', 'skills', 'contact'],
   },
   {
@@ -253,6 +275,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'business',
     style: 'modern',
     description: '咨询顾问风格，数据驱动，逻辑清晰',
+    descriptionEn: 'Consultant style, data-driven with clear logic',
     previewImage: '/templates/consultant.jpg',
     colors: {
       primary: '#5a7a76',
@@ -266,6 +289,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Open Sans", sans-serif',
     },
     features: ['数据可视化', '案例展示', '客户评价', '证书展示'],
+    featuresEn: ['Data visualization', 'Case studies', 'Client reviews', 'Certifications'],
     navigation: ['home', 'about', 'experience', 'contact'],
   },
 
@@ -276,6 +300,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'academic',
     style: 'minimal',
     description: '学术研究风格，严谨专业，文献展示',
+    descriptionEn: 'Academic research style, rigorous and professional',
     previewImage: '/templates/researcher.jpg',
     colors: {
       primary: '#3730a3',
@@ -289,6 +314,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Source Serif Pro", serif',
     },
     features: ['论文列表', '引用统计', '研究项目', '合作网络'],
+    featuresEn: ['Paper list', 'Citation stats', 'Research projects', 'Collaboration network'],
     navigation: ['home', 'research', 'publications', 'contact'],
   },
   {
@@ -297,6 +323,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'academic',
     style: 'elegant',
     description: '教授个人主页，教学研究，学生资源',
+    descriptionEn: 'Professor homepage with teaching, research, and student resources',
     previewImage: '/templates/professor.jpg',
     colors: {
       primary: '#7c2d12',
@@ -310,6 +337,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Crimson Text", serif',
     },
     features: ['课程列表', '办公时间', '学生指导', '学术活动'],
+    featuresEn: ['Course list', 'Office hours', 'Student mentoring', 'Academic events'],
     navigation: ['home', 'teaching', 'research', 'students', 'contact'],
   },
 
@@ -320,6 +348,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'creative',
     style: 'modern',
     description: '单页滚动设计，流畅体验，故事叙述',
+    descriptionEn: 'Single-page scroll design with smooth storytelling experience',
     previewImage: '/templates/one-page.jpg',
     colors: {
       primary: '#8a5a7a',
@@ -333,6 +362,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Inter", sans-serif',
     },
     features: ['平滑滚动', '视差效果', '章节动画', '导航高亮'],
+    featuresEn: ['Smooth scrolling', 'Parallax effects', 'Section animations', 'Nav highlighting'],
     navigation: ['home'], // 单页设计，锚点导航
   },
   {
@@ -341,6 +371,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'design',
     style: 'elegant',
     description: '杂志风格，大图配文，阅读体验佳',
+    descriptionEn: 'Magazine style with large images and great reading experience',
     previewImage: '/templates/magazine.jpg',
     colors: {
       primary: '#2a2a2a',
@@ -354,6 +385,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"Tiempos Text", serif',
     },
     features: ['杂志布局', '大图展示', '文章列表', '订阅功能'],
+    featuresEn: ['Magazine layout', 'Large images', 'Article list', 'Subscription feature'],
     navigation: ['home', 'articles', 'about', 'contact'],
   },
   {
@@ -362,6 +394,7 @@ export const templatesV2: TemplateV2[] = [
     category: 'tech',
     style: 'modern',
     description: '仪表盘风格，数据可视化，信息密度高',
+    descriptionEn: 'Dashboard style with data visualization and high information density',
     previewImage: '/templates/dashboard.jpg',
     colors: {
       primary: '#5a7a9a',
@@ -375,6 +408,7 @@ export const templatesV2: TemplateV2[] = [
       body: '"SF Pro Text", -apple-system, sans-serif',
     },
     features: ['卡片布局', '数据图表', '实时统计', '暗色主题'],
+    featuresEn: ['Card layout', 'Data charts', 'Live stats', 'Dark theme'],
     navigation: ['home', 'stats', 'projects', 'skills', 'contact'],
   },
 ];

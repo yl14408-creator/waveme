@@ -37,6 +37,7 @@ import { Heatmap } from '@/components/visual-components/Heatmap';
 import { EventStream } from '@/components/visual-components/EventStream';
 import { ComparisonTag } from '@/components/visual-components/ComparisonTag';
 import { analyticsService, type AnalyticsData } from '@/services/analytics';
+import { useI18n } from '@/i18n';
 
 interface ComponentsPageProps {
   onNavigate: (page: string) => void;
@@ -51,37 +52,12 @@ const STONE_COLORS = {
   chart: ['#57534e', '#78716c', '#a8a29e', '#d6d3d1', '#c4c0bb'],
 };
 
-const componentCategories = [
-  {
-    id: 'charts',
-    name: '数据图表',
-    icon: <BarChart3 className="w-5 h-5" />,
-    description: '丰富的数据可视化组件，让数据更有说服力'
-  },
-  {
-    id: 'progress',
-    name: '进度展示',
-    icon: <TrendingUp className="w-5 h-5" />,
-    description: '技能进度、项目完成度等可视化展示'
-  },
-  {
-    id: 'cards',
-    name: '信息卡片',
-    icon: <Layers className="w-5 h-5" />,
-    description: '教育背景、工作经历等结构化信息展示'
-  },
-  {
-    id: 'media',
-    name: '媒体展示',
-    icon: <Image className="w-5 h-5" />,
-    description: '图片画廊、地图等富媒体组件'
-  },
-  {
-    id: 'dashboard',
-    name: '仪表盘',
-    icon: <Activity className="w-5 h-5" />,
-    description: '实时数据监控和分析组件'
-  }
+const componentCategoryDefs = [
+  { id: 'charts', nameKey: 'components.category.charts', icon: <BarChart3 className="w-5 h-5" /> },
+  { id: 'progress', nameKey: 'components.category.progress', icon: <TrendingUp className="w-5 h-5" /> },
+  { id: 'cards', nameKey: 'components.category.cards', icon: <Layers className="w-5 h-5" /> },
+  { id: 'media', nameKey: 'components.category.media', icon: <Image className="w-5 h-5" /> },
+  { id: 'dashboard', nameKey: 'components.category.dashboard', icon: <Activity className="w-5 h-5" /> },
 ];
 
 const sampleEducation = [
@@ -140,10 +116,16 @@ const sampleExpectationData = {
 };
 
 export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
+  const { t } = useI18n();
   const [activeCategory, setActiveCategory] = useState('charts');
   const [salaryValue, setSalaryValue] = useState(25000);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const componentCategories = componentCategoryDefs.map(c => ({
+    ...c,
+    name: t(c.nameKey),
+  }));
 
   // 加载真实数据
   useEffect(() => {
@@ -171,12 +153,12 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-stone-600" />
-                仪表盘图表
+                {t('components.section.gaugeCharts')}
               </h3>
               <div className="grid md:grid-cols-3 gap-6">
-                <GaugeChart value={85} max={100} label="技能掌握度" colorScheme="stone" />
-                <GaugeChart value={72} max={100} label="项目完成度" colorScheme="stone" />
-                <GaugeChart value={93} max={100} label="客户满意度" colorScheme="stone" />
+                <GaugeChart value={85} max={100} label={t('components.gauge.skillMastery')} colorScheme="stone" />
+                <GaugeChart value={72} max={100} label={t('components.gauge.projectCompletion')} colorScheme="stone" />
+                <GaugeChart value={93} max={100} label={t('components.gauge.clientSatisfaction')} colorScheme="stone" />
               </div>
             </div>
 
@@ -184,7 +166,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <LineChart className="w-5 h-5 text-stone-600" />
-                技能雷达图
+                {t('components.section.radarChart')}
               </h3>
               <div className="max-w-md mx-auto">
                 <RadarSkills 
@@ -205,7 +187,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <PieChart className="w-5 h-5 text-stone-600" />
-                漏斗分析
+                {t('components.section.funnelChart')}
               </h3>
               <FunnelChart 
                 data={[
@@ -226,7 +208,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-stone-600" />
-                技能进度条
+                {t('components.section.progressBars')}
               </h3>
               <div className="space-y-4">
                 <ProgressBar label="React / Next.js" value={95} color={STONE_COLORS.primary} showPercentage />
@@ -241,7 +223,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-stone-600" />
-                薪资期望滑块
+                {t('components.section.salarySlider')}
               </h3>
               <SalarySlider 
                 value={salaryValue}
@@ -257,7 +239,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-stone-600" />
-                对比标签
+                {t('components.section.comparisonTags')}
               </h3>
               <div className="flex flex-wrap gap-3">
                 <ComparisonTag value={23.5} label="vs 上月" />
@@ -275,7 +257,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <GraduationCap className="w-5 h-5 text-stone-600" />
-                教育背景卡片
+                {t('components.section.educationCard')}
               </h3>
               <EducationCard education={sampleEducation} />
             </div>
@@ -284,7 +266,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-stone-600" />
-                求职期望卡片
+                {t('components.section.expectationCard')}
               </h3>
               <ExpectationCard 
                 data={sampleExpectationData}
@@ -296,7 +278,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Award className="w-5 h-5 text-stone-600" />
-                成就徽章
+                {t('components.section.achievementBadges')}
               </h3>
               <AchievementBadge achievements={sampleAchievements} />
             </div>
@@ -305,7 +287,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-stone-600" />
-                时间线
+                {t('components.section.timeline')}
               </h3>
               <div className="space-y-0">
                 <TimelineItem 
@@ -341,7 +323,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Image className="w-5 h-5 text-stone-600" />
-                项目照片画廊
+                {t('components.section.photoGallery')}
               </h3>
               <PhotoGallery photos={samplePhotos} />
             </div>
@@ -350,7 +332,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-stone-600" />
-                工作地点地图
+                {t('components.section.miniMap')}
               </h3>
               <MiniMap locations={sampleLocations} />
             </div>
@@ -365,12 +347,12 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
               <div className="flex items-center gap-3">
                 <Activity className="w-5 h-5 text-stone-600" />
                 <span className="text-stone-700">
-                  {isLoading ? '加载真实数据中...' : analyticsData ? '已接入真实数据分析' : '显示示例数据'}
+                  {isLoading ? t('components.section.dataNotice.loading') : analyticsData ? t('components.section.dataNotice.real') : t('components.section.dataNotice.sample')}
                 </span>
               </div>
               <Button variant="outline" size="sm" onClick={loadAnalyticsData} disabled={isLoading}>
                 <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-                刷新
+                {t('components.section.refresh')}
               </Button>
             </div>
 
@@ -378,33 +360,33 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-stone-600" />
-                指标卡片
+                {t('components.section.metricCards')}
               </h3>
               <div className="grid md:grid-cols-4 gap-4">
-                <MetricCard 
-                  title="总访问"
+                <MetricCard
+                  title={t('analytics.dashboard.totalViews')}
                   value={analyticsData?.totalViews || 12847}
                   change={analyticsData?.viewsChange || 23.5}
                   icon={<Globe className="w-5 h-5" />}
                   iconBg="bg-stone-600"
                 />
-                <MetricCard 
-                  title="独立访客"
+                <MetricCard
+                  title={t('analytics.dashboard.uniqueVisitors')}
                   value={analyticsData?.uniqueVisitors || 8234}
                   change={analyticsData?.visitorsChange || 18.2}
                   icon={<Activity className="w-5 h-5" />}
                   iconBg="bg-stone-500"
                 />
-                <MetricCard 
-                  title="平均停留"
+                <MetricCard
+                  title={t('analytics.dashboard.avgStay')}
                   value={analyticsData ? parseInt(analyticsData.avgDwellTime) : 222}
                   suffix="秒"
                   change={analyticsData?.dwellTimeChange || 12.8}
                   icon={<Clock className="w-5 h-5" />}
                   iconBg="bg-stone-400"
                 />
-                <MetricCard 
-                  title="跳出率"
+                <MetricCard
+                  title={t('analytics.dashboard.bounceRate')}
                   value={analyticsData?.bounceRate || 32}
                   suffix="%"
                   change={-(analyticsData?.bounceRateChange || 5)}
@@ -419,7 +401,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-stone-600" />
-                状态指示灯
+                {t('components.section.statusIndicators')}
               </h3>
               <div className="flex flex-wrap gap-4">
                 <StatusIndicator status="online" label="网站在线" />
@@ -433,7 +415,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-stone-600" />
-                访问热力图
+                {t('components.section.heatmap')}
               </h3>
               <Heatmap 
                 data={[
@@ -455,7 +437,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
               <h3 className="text-lg font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-stone-600" />
-                实时事件流
+                {t('components.section.eventStream')}
               </h3>
               <EventStream />
             </div>
@@ -478,13 +460,13 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-stone-100 rounded-full text-stone-600 text-sm font-medium mb-6 border border-stone-200">
             <Layers className="w-4 h-4" />
-            <span>组件库</span>
+            <span>{t('components.badge')}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-stone-800 mb-4">
-            丰富的可视化组件
+            {t('components.title')}
           </h1>
           <p className="text-xl text-stone-500 max-w-2xl mx-auto">
-            20+ 精心设计的组件，让你的个人网站更具专业感和视觉冲击力
+            {t('components.subtitle')}
           </p>
         </motion.div>
 
@@ -534,7 +516,7 @@ export function ComponentsPage({ onNavigate }: ComponentsPageProps) {
             onClick={() => onNavigate('upload')}
             className="bg-stone-700 hover:bg-stone-800 text-white px-10 py-6 text-lg rounded-xl shadow-lg"
           >
-            开始使用这些组件
+            {t('components.cta')}
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
         </motion.div>

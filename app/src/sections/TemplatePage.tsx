@@ -145,7 +145,7 @@ export function TemplatePage({
                 </motion.div>
                 <div>
                   <h2 className="font-semibold text-stone-800">{previewTemplate.name}</h2>
-                  <p className="text-sm text-stone-500">{previewTemplate.description}</p>
+                  <p className="text-sm text-stone-500">{language === 'en' ? previewTemplate.descriptionEn : previewTemplate.description}</p>
                 </div>
               </div>
               
@@ -473,11 +473,11 @@ export function TemplatePage({
                           <h3 className="text-lg font-bold text-stone-800">{template.name}</h3>
                           <span className="text-xs text-stone-500 capitalize">{template.category}</span>
                         </div>
-                        <p className="text-sm text-stone-600 mb-4">{template.description}</p>
+                        <p className="text-sm text-stone-600 mb-4">{language === 'en' ? template.descriptionEn : template.description}</p>
 
                         {/* Features */}
                         <div className="flex flex-wrap gap-1.5 mb-4">
-                          {template.features.slice(0, 3).map((feature, i) => (
+                          {(language === 'en' ? template.featuresEn : template.features).slice(0, 3).map((feature, i) => (
                             <span
                               key={i}
                               className="px-2 py-0.5 bg-stone-100 text-stone-600 rounded text-xs"
