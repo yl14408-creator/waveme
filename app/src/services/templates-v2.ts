@@ -411,6 +411,63 @@ export const templatesV2: TemplateV2[] = [
     featuresEn: ['Card layout', 'Data charts', 'Live stats', 'Dark theme'],
     navigation: ['home', 'stats', 'projects', 'skills', 'contact'],
   },
+  // ===== 新模板 =====
+  {
+    id: 'minimalist-v2',
+    name: 'Minimalist',
+    category: 'design',
+    style: 'minimal',
+    description: '极简双栏布局，优雅的时间线式工作经历',
+    descriptionEn: 'Clean two-column layout with elegant timeline experience',
+    previewImage: '/templates/minimalist-v2.jpg',
+    colors: { primary: '#0f172a', secondary: '#64748b', background: '#ffffff', text: '#0f172a', accent: '#3b82f6' },
+    fonts: { heading: '"Inter", sans-serif', body: '"Inter", sans-serif' },
+    features: ['双栏布局', '时间线', '标签技能'],
+    featuresEn: ['Two-column layout', 'Timeline view', 'Tag skills'],
+    navigation: ['home', 'experience', 'projects', 'skills', 'contact'],
+  },
+  {
+    id: 'bento-v2',
+    name: 'Bento',
+    category: 'design',
+    style: 'modern',
+    description: 'Bento 网格布局，圆角卡片，现代感十足',
+    descriptionEn: 'Bento grid layout with rounded cards and modern aesthetics',
+    previewImage: '/templates/bento-v2.jpg',
+    colors: { primary: '#3b82f6', secondary: '#10b981', background: '#f8f9fa', text: '#1a1a2e', accent: '#6366f1' },
+    fonts: { heading: '"Space Grotesk", sans-serif', body: '"Space Grotesk", sans-serif' },
+    features: ['网格布局', '圆角卡片', '彩色分区'],
+    featuresEn: ['Grid layout', 'Rounded cards', 'Color sections'],
+    navigation: ['home', 'experience', 'projects', 'skills', 'contact'],
+  },
+  {
+    id: 'terminal-pro',
+    name: 'Terminal Pro',
+    category: 'tech',
+    style: 'retro',
+    description: 'GitHub 暗色终端风格，专业程序员专属',
+    descriptionEn: 'GitHub dark terminal style — the ultimate dev portfolio',
+    previewImage: '/templates/terminal-pro.jpg',
+    colors: { primary: '#7ee787', secondary: '#79c0ff', background: '#0d1117', text: '#c9d1d9', accent: '#ffa657' },
+    fonts: { heading: '"JetBrains Mono", monospace', body: '"JetBrains Mono", monospace' },
+    features: ['终端窗口', 'JSON 输出', '语法配色', '光标动画'],
+    featuresEn: ['Terminal window', 'JSON output', 'Syntax colors', 'Cursor animation'],
+    navigation: ['home', 'experience', 'projects', 'skills', 'contact'],
+  },
+  {
+    id: 'elegant-v2',
+    name: 'Elegant',
+    category: 'business',
+    style: 'elegant',
+    description: '衬线字体，居中排版，高端杂志编辑风格',
+    descriptionEn: 'Serif typography, centered layout — editorial magazine style',
+    previewImage: '/templates/elegant-v2.jpg',
+    colors: { primary: '#1a1a1a', secondary: '#555555', background: '#fdfcfb', text: '#1a1a1a', accent: '#888888' },
+    fonts: { heading: '"Cormorant Garamond", serif', body: '"Cormorant Garamond", serif' },
+    features: ['衬线字体', '居中布局', '细线分隔', '斜体引用'],
+    featuresEn: ['Serif fonts', 'Centered layout', 'Fine dividers', 'Italic quotes'],
+    navigation: ['home', 'experience', 'projects', 'skills', 'contact'],
+  },
 ];
 
 // 获取模板 by ID
@@ -452,6 +509,14 @@ export function generateTemplateHTMLV2(
       return generateDoodleTemplate(template, data, colors, navigation);
     case 'portfolio-pro':
       return generatePortfolioProTemplate(template, data, colors, navigation);
+    case 'minimalist-v2':
+      return generateMinimalistV2Template(template, data, colors, navigation);
+    case 'bento-v2':
+      return generateBentoV2Template(template, data, colors, navigation);
+    case 'terminal-pro':
+      return generateTerminalProV2Template(template, data, colors, navigation);
+    case 'elegant-v2':
+      return generateElegantV2Template(template, data, colors, navigation);
     default:
       return generateCleanCodeTemplate(template, data, colors, navigation);
   }
@@ -1961,4 +2026,411 @@ export function downloadHTML(html: string, filename: string): void {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+// ===== 新增 4 个高质量模板 =====
+
+// --- Minimalist V2 ---
+function generateMinimalistV2Template(
+  _template: TemplateV2,
+  data: ResumeData,
+  colors: TemplateV2['colors'],
+  _navigation: string[]
+): string {
+  const expHTML = data.experience.map(exp => `
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-header">
+        <div>
+          <h3 class="exp-role">${exp.title}</h3>
+          <p class="exp-company">${exp.company}</p>
+        </div>
+        <span class="exp-period">${exp.startDate} – ${exp.current ? 'Present' : (exp.endDate || '')}</span>
+      </div>
+      <ul class="exp-desc">${exp.description.map(d => `<li>${d}</li>`).join('')}</ul>
+    </div>`).join('');
+
+  const projHTML = data.projects.map(p => `
+    <div class="proj-item">
+      <h3 class="proj-name">${p.name}${p.link ? ` <span class="proj-link">↗</span>` : ''}</h3>
+      <p class="proj-desc">${p.description}</p>
+      ${p.technologies?.length ? `<div class="proj-tech">${p.technologies.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+    </div>`).join('');
+
+  const eduHTML = data.education.map(e => `
+    <div class="edu-item">
+      <h3 class="edu-school">${e.school}</h3>
+      <p class="edu-degree">${e.degree}${e.field ? `, ${e.field}` : ''}</p>
+      <p class="edu-year">${e.endDate || e.startDate}</p>
+    </div>`).join('');
+
+  const skillsHTML = (data.skills || []).map(s => `<span class="skill-chip">${s}</span>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${data.name}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#fff;color:#0f172a;line-height:1.6}
+.page{max-width:900px;margin:0 auto;padding:3rem 2rem}
+header{border-bottom:1px solid #f1f5f9;padding-bottom:2rem;margin-bottom:2.5rem}
+h1{font-size:3rem;font-weight:800;letter-spacing:-0.03em;color:#0f172a}
+.subtitle{font-size:1.1rem;color:#94a3b8;font-weight:500;text-transform:uppercase;letter-spacing:.12em;margin:.5rem 0 1.5rem}
+.contacts{display:flex;flex-wrap:wrap;gap:1.5rem;font-size:.875rem;color:#475569}
+.contacts span{display:flex;align-items:center;gap:.4rem}
+.layout{display:grid;grid-template-columns:2fr 1fr;gap:3rem}
+h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:#94a3b8;border-bottom:1px solid #f8fafc;padding-bottom:.5rem;margin-bottom:1.5rem}
+.summary{font-size:1.1rem;color:#334155;line-height:1.8;font-style:italic;margin-bottom:2.5rem}
+.exp-item{position:relative;padding-left:1.5rem;border-left:2px solid #f1f5f9;margin-bottom:2rem}
+.exp-dot{position:absolute;left:-9px;top:4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #e2e8f0}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem}
+.exp-role{font-size:1.1rem;font-weight:700}
+.exp-company{color:#64748b;font-weight:500}
+.exp-period{font-size:.75rem;font-family:monospace;color:#94a3b8;background:#f8fafc;padding:.2rem .5rem;border-radius:.25rem;white-space:nowrap}
+.exp-desc{padding-left:1rem;color:#475569;font-size:.9rem;margin-top:.5rem}
+.exp-desc li{margin-bottom:.25rem}
+.proj-item{margin-bottom:1.5rem}
+.proj-name{font-size:1rem;font-weight:700;color:#0f172a}
+.proj-link{color:#94a3b8;font-size:.8rem}
+.proj-desc{font-size:.875rem;color:#475569;margin:.25rem 0 .5rem}
+.proj-tech{display:flex;flex-wrap:wrap;gap:.3rem}
+.proj-tech span{font-size:.7rem;background:#f1f5f9;color:#475569;padding:.15rem .5rem;border-radius:.25rem}
+.skill-chip{display:inline-block;padding:.3rem .75rem;background:#f8fafc;color:#334155;font-size:.8rem;font-weight:500;border-radius:9999px;border:1px solid #e2e8f0;margin:.2rem}
+.edu-item{margin-bottom:1.2rem}
+.edu-school{font-weight:700;color:#0f172a}
+.edu-degree{font-size:.875rem;color:#475569}
+.edu-year{font-size:.75rem;font-family:monospace;color:#94a3b8;margin-top:.25rem}
+.section{margin-bottom:2.5rem}
+.cta{background:#0f172a;color:#fff;border-radius:.75rem;padding:1rem;margin-top:2rem}
+.cta p:first-child{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;opacity:.5;margin-bottom:.25rem}
+.cta p:last-child{font-size:.875rem;font-weight:500}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>${data.name}</h1>
+    <p class="subtitle">${data.title}</p>
+    <div class="contacts">
+      ${data.email ? `<span>✉ ${data.email}</span>` : ''}
+      ${data.phone ? `<span>📞 ${data.phone}</span>` : ''}
+      ${data.location ? `<span>📍 ${data.location}</span>` : ''}
+      ${data.website ? `<span>🌐 ${data.website}</span>` : ''}
+    </div>
+  </header>
+  <div class="layout">
+    <div>
+      ${data.summary ? `<p class="summary">"${data.summary}"</p>` : ''}
+      ${data.experience?.length ? `<div class="section"><h2>Experience</h2>${expHTML}</div>` : ''}
+      ${data.projects?.length ? `<div class="section"><h2>Projects</h2>${projHTML}</div>` : ''}
+    </div>
+    <div>
+      ${data.skills?.length ? `<div class="section"><h2>Expertise</h2><div>${skillsHTML}</div></div>` : ''}
+      ${data.education?.length ? `<div class="section"><h2>Education</h2>${eduHTML}</div>` : ''}
+      <div class="cta"><p>Available for</p><p>Full-time opportunities &amp; consulting</p></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+// --- Bento V2 ---
+function generateBentoV2Template(
+  _template: TemplateV2,
+  data: ResumeData,
+  _colors: TemplateV2['colors'],
+  _navigation: string[]
+): string {
+  const skillsHTML = (data.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('');
+  const expHTML = data.experience.map(exp => `
+    <div class="exp-row">
+      <div class="exp-left">
+        <h3>${exp.title}</h3>
+        <p class="exp-co">${exp.company}</p>
+      </div>
+      <div class="exp-right">
+        <span class="period">${exp.startDate} – ${exp.current ? 'Now' : (exp.endDate || '')}</span>
+        <p class="exp-detail">${exp.description[0] || ''}</p>
+      </div>
+    </div>`).join('');
+  const projHTML = data.projects.slice(0, 4).map(p => `
+    <div class="proj-card">
+      <h3>${p.name}</h3>
+      <p>${p.description}</p>
+    </div>`).join('');
+  const eduHTML = data.education.map(e => `
+    <div class="edu-row">
+      <h3>${e.school}</h3>
+      <p>${e.degree}${e.field ? `, ${e.field}` : ''}</p>
+      <span>${e.endDate || e.startDate}</span>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${data.name}</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Space Grotesk',sans-serif;background:#f8f9fa;color:#1a1a2e;min-height:100vh;padding:2rem}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;max-width:1100px;margin:0 auto}
+.card{border-radius:2rem;padding:2rem}
+.profile{grid-column:span 8;background:#fff;border:1px solid #e8ecf0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.contact-card{grid-column:span 4;background:#1a1a2e;color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+.skills-card{grid-column:span 4;background:#eff6ff;border:1px solid #dbeafe}
+.exp-card{grid-column:span 8;background:#fff;border:1px solid #e8ecf0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.proj-card-wrap{grid-column:span 7;background:#fff;border:1px solid #e8ecf0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.edu-card{grid-column:span 5;background:#ecfdf5;border:1px solid #d1fae5}
+h1{font-size:3.5rem;font-weight:900;letter-spacing:-.03em;background:linear-gradient(135deg,#1a1a2e,#64748b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.75rem}
+.role{font-size:1.4rem;font-weight:500;color:#3b82f6;margin-bottom:1rem}
+.summary-text{color:#64748b;line-height:1.7;font-size:1rem}
+.contact-item{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.contact-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.contact-text{font-size:.875rem;font-weight:500;word-break:break-all}
+.card h2{font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.card h2::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%}
+.skills-card h2::before{background:#3b82f6}
+.exp-card h2::before{background:#1a1a2e}
+.proj-card-wrap h2::before{background:#10b981}
+.edu-card h2::before{background:#059669}
+.skill-tag{display:inline-block;padding:.4rem 1rem;background:#fff;border-radius:.75rem;font-size:.8rem;font-weight:700;color:#1d4ed8;box-shadow:0 1px 2px rgba(0,0,0,.05);margin:.2rem}
+.exp-row{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #f1f5f9}
+.exp-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.exp-left h3{font-size:1rem;font-weight:700;margin-bottom:.2rem}
+.exp-co{color:#64748b;font-size:.9rem}
+.period{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8}
+.exp-detail{font-size:.85rem;color:#475569;margin-top:.3rem;line-height:1.5}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.proj-card{padding:1.25rem;border-radius:1rem;background:#f8fafc;border:1px solid #f1f5f9}
+.proj-card h3{font-weight:700;font-size:.95rem;margin-bottom:.4rem}
+.proj-card p{font-size:.8rem;color:#64748b;line-height:1.5}
+.edu-row{margin-bottom:1.25rem}
+.edu-row h3{font-weight:700;color:#065f46;font-size:1rem}
+.edu-row p{font-size:.875rem;color:#047857;margin:.2rem 0}
+.edu-row span{font-size:.7rem;font-weight:900;color:#6ee7b7;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:768px){.profile,.contact-card,.skills-card,.exp-card,.proj-card-wrap,.edu-card{grid-column:span 12}}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="card profile">
+    <h1>${data.name}</h1>
+    <p class="role">${data.title}</p>
+    <p class="summary-text">${data.summary}</p>
+  </div>
+  <div class="card contact-card">
+    <div>
+      ${data.email ? `<div class="contact-item"><div class="contact-icon">✉</div><span class="contact-text">${data.email}</span></div>` : ''}
+      ${data.phone ? `<div class="contact-item"><div class="contact-icon">📞</div><span class="contact-text">${data.phone}</span></div>` : ''}
+      ${data.location ? `<div class="contact-item"><div class="contact-icon">📍</div><span class="contact-text">${data.location}</span></div>` : ''}
+    </div>
+  </div>
+  ${data.skills?.length ? `<div class="card skills-card"><h2>Expertise</h2><div>${skillsHTML}</div></div>` : ''}
+  ${data.experience?.length ? `<div class="card exp-card"><h2>Experience</h2>${expHTML}</div>` : ''}
+  ${data.projects?.length ? `<div class="card proj-card-wrap"><h2>Projects</h2><div class="proj-grid">${projHTML}</div></div>` : ''}
+  ${data.education?.length ? `<div class="card edu-card"><h2>Education</h2>${eduHTML}</div>` : ''}
+</div>
+</body>
+</html>`;
+}
+
+// --- Terminal Pro V2 ---
+function generateTerminalProV2Template(
+  _template: TemplateV2,
+  data: ResumeData,
+  _colors: TemplateV2['colors'],
+  _navigation: string[]
+): string {
+  const skillsLine = (data.skills || []).map(s => `<span class="skill">${s.toLowerCase().replace(/ /g,'_')}/</span>`).join('');
+  const expHTML = data.experience.map((exp, i) => `
+    <div class="exp-block">
+      <div class="cmd-line"><span class="num">${1024+i}</span> <span class="cmd">cat ${exp.company.toLowerCase().replace(/\s+/g,'_')}.json</span></div>
+      <div class="json-block"><pre>{
+  "position": "${exp.title}",
+  "company":  "${exp.company}",
+  "period":   "${exp.startDate} → ${exp.current ? 'Present' : (exp.endDate||'')}",
+  "location": "${exp.location||''}"
+}</pre>
+      <ul>${exp.description.map(d=>`<li>${d}</li>`).join('')}</ul></div>
+    </div>`).join('');
+  const projHTML = data.projects.map(p => `
+    <div class="proj-line">
+      <span class="perm">drwxr-xr-x</span>
+      <div><p class="proj-name">${p.name}</p><p class="proj-desc">${p.description}</p></div>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${data.name} — terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'JetBrains Mono',monospace;background:#0d1117;color:#c9d1d9;min-height:100vh}
+.window{max-width:900px;margin:2rem auto;border-radius:12px;overflow:hidden;border:1px solid #30363d;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.titlebar{background:#161b22;padding:.75rem 1rem;display:flex;align-items:center;gap:.5rem}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
+.title-text{margin-left:1rem;font-size:.75rem;color:#8b949e}
+.body{padding:2rem;background:#0d1117}
+.prompt{display:flex;gap:.75rem;color:#79c0ff;margin-bottom:.25rem}
+.prompt .dollar{color:#8b949e}
+.output{padding:.5rem 0 1.5rem 1rem}
+.name{font-size:2rem;font-weight:700;color:#ffa657}
+.role{font-size:1.2rem;color:#7ee787;margin-top:.25rem}
+.json-contact{color:#a5d6ff}
+.json-contact pre{font-size:.85rem;line-height:1.6;white-space:pre-wrap}
+.summary-text{color:#8b949e;font-style:italic;line-height:1.7;font-size:.9rem;border-left:2px solid #30363d;padding-left:1rem}
+.skills-row{display:flex;flex-wrap:wrap;gap:.5rem;padding:.5rem 0 1.5rem 1rem}
+.skill{color:#7ee787;font-size:.85rem}
+.section-cmd{margin-bottom:1.5rem}
+.cmd-line{display:flex;gap:.75rem;align-items:baseline}
+.num{color:#8b949e;font-size:.75rem;min-width:3rem}
+.cmd{color:#79c0ff}
+.json-block{padding-left:3.5rem;margin-top:.5rem}
+.json-block pre{color:#a5d6ff;font-size:.8rem;line-height:1.6;margin-bottom:.5rem}
+.json-block ul{list-style:none;padding:0}
+.json-block li{color:#c9d1d9;font-size:.82rem;padding:.15rem 0}
+.json-block li::before{content:"→ ";color:#27c93f}
+.exp-block{margin-bottom:1.5rem}
+.proj-line{display:flex;gap:1.5rem;margin-bottom:.75rem;padding-left:1rem}
+.perm{color:#27c93f;font-size:.75rem;flex-shrink:0}
+.proj-name{color:#7ee787;font-weight:700;font-size:.9rem}
+.proj-desc{color:#8b949e;font-size:.8rem;margin-top:.2rem}
+.cursor{display:inline-block;width:8px;height:1.2em;background:#79c0ff;animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <span class="title-text">bash — ${data.name.toLowerCase().replace(/ /g,'_')}.sh — 80×24</span>
+  </div>
+  <div class="body">
+    <div class="prompt"><span class="dollar">$</span><span>whoami</span></div>
+    <div class="output"><p class="name">${data.name}</p><p class="role">${data.title}</p></div>
+    <div class="prompt"><span class="dollar">$</span><span>cat contact_info.json</span></div>
+    <div class="output json-contact"><pre>{
+  "email":    "${data.email}",
+  "phone":    "${data.phone}",
+  "location": "${data.location}"${data.website ? `,
+  "website":  "https://${data.website}"` : ''}
+}</pre></div>
+    ${data.summary ? `<div class="prompt"><span class="dollar">$</span><span>grep -r "summary" .</span></div>
+    <div class="output"><p class="summary-text">${data.summary}</p></div>` : ''}
+    ${data.skills?.length ? `<div class="prompt"><span class="dollar">$</span><span>ls skills/</span></div>
+    <div class="skills-row">${skillsLine}</div>` : ''}
+    ${data.experience?.length ? `<div class="prompt"><span class="dollar">$</span><span>history | grep "work_experience"</span></div>
+    <div class="output section-cmd">${expHTML}</div>` : ''}
+    ${data.projects?.length ? `<div class="prompt"><span class="dollar">$</span><span>ls -la projects/</span></div>
+    <div class="output">${projHTML}</div>` : ''}
+    <div style="margin-top:2rem"><span class="dollar">$ </span><span class="cursor"></span></div>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+// --- Elegant V2 ---
+function generateElegantV2Template(
+  _template: TemplateV2,
+  data: ResumeData,
+  _colors: TemplateV2['colors'],
+  _navigation: string[]
+): string {
+  const expHTML = data.experience.map(exp => `
+    <div class="exp-row">
+      <div class="exp-period">${exp.startDate}<br>${exp.current ? 'Present' : (exp.endDate||'')}</div>
+      <div class="exp-body">
+        <h3 class="exp-role">${exp.title}</h3>
+        <p class="exp-co">${exp.company}</p>
+        <ul class="exp-list">${exp.description.map(d=>`<li>${d}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+  const eduHTML = data.education.map(e => `
+    <div class="edu-item">
+      <h3>${e.school}</h3>
+      <p class="edu-deg">${e.degree}${e.field ? `, ${e.field}` : ''}</p>
+      <p class="edu-yr">${e.endDate || e.startDate}</p>
+    </div>`).join('');
+  const skillsHTML = (data.skills || []).map(s => `
+    <div class="skill-row"><div class="skill-dot"></div><span>${s}</span></div>`).join('');
+  const projHTML = data.projects.map(p => `
+    <div class="proj-item">
+      <h3>${p.name}</h3>
+      <p>${p.description}</p>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${data.name}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cormorant Garamond',serif;background:#fdfcfb;color:#1a1a1a;line-height:1.6}
+.page{max-width:900px;margin:0 auto;padding:4rem 3rem}
+header{text-align:center;margin-bottom:4rem}
+h1{font-size:4rem;font-weight:300;letter-spacing:-.02em;border-bottom:2px solid #1a1a1a;display:inline-block;padding:0 2rem .75rem;margin-bottom:1rem}
+.subtitle{font-family:'Inter',sans-serif;font-size:.9rem;font-weight:300;text-transform:uppercase;letter-spacing:.25em;color:#555;font-style:italic}
+.contacts{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;font-family:'Inter',sans-serif;font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;color:#888}
+.divider{width:60px;height:1px;background:#1a1a1a;margin:3rem auto}
+.section-title{font-family:'Inter',sans-serif;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.35em;color:#999;text-align:center;margin-bottom:2.5rem}
+.summary-quote{max-width:600px;margin:0 auto;text-align:center;font-size:1.3rem;line-height:1.8;font-style:italic;color:#333}
+.exp-row{display:grid;grid-template-columns:120px 1fr;gap:2rem;margin-bottom:2.5rem}
+.exp-period{font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;text-align:right;line-height:1.8;padding-top:.3rem}
+.exp-role{font-size:1.6rem;font-weight:500;margin-bottom:.25rem}
+.exp-co{font-size:1.1rem;font-style:italic;color:#666;margin-bottom:.75rem}
+.exp-list{list-style:none;padding:0}
+.exp-list li{font-size:.95rem;color:#444;padding:.2rem 0;line-height:1.7}
+.exp-list li::before{content:"— ";color:#999}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;border-top:1px solid #eee;padding-top:3rem;margin-top:1rem}
+.edu-item{margin-bottom:1.5rem}
+.edu-item h3{font-size:1.3rem;font-weight:500}
+.edu-deg{font-size:.95rem;font-style:italic;color:#666;margin:.2rem 0}
+.edu-yr{font-family:'Inter',sans-serif;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#aaa;margin-top:.4rem}
+.skill-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem;font-family:'Inter',sans-serif;font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;color:#444}
+.skill-dot{width:4px;height:4px;background:#1a1a1a;border-radius:50%;flex-shrink:0}
+.proj-section{border-top:1px solid #eee;padding-top:3rem;margin-top:3rem}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:.5rem}
+.proj-item{text-align:center}
+.proj-item h3{font-size:1.2rem;font-weight:500;margin-bottom:.5rem}
+.proj-item p{font-size:.9rem;color:#666;font-style:italic;line-height:1.6}
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid #eee;text-align:center;font-family:'Inter',sans-serif;font-size:.65rem;text-transform:uppercase;letter-spacing:.4em;color:#aaa}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>${data.name.toUpperCase()}</h1>
+    <p class="subtitle">${data.title}</p>
+    <div class="contacts">
+      ${data.email ? `<span>${data.email}</span>` : ''}
+      ${data.phone ? `<span>${data.phone}</span>` : ''}
+      ${data.location ? `<span>${data.location}</span>` : ''}
+    </div>
+  </header>
+  ${data.summary ? `<div class="divider"></div><p class="summary-quote">"${data.summary}"</p>` : ''}
+  ${data.experience?.length ? `<div class="divider"></div><h2 class="section-title">Professional Experience</h2>${expHTML}` : ''}
+  ${(data.education?.length || data.skills?.length) ? `<div class="bottom-grid">
+    ${data.education?.length ? `<div><h2 class="section-title" style="text-align:left">Education</h2>${eduHTML}</div>` : ''}
+    ${data.skills?.length ? `<div><h2 class="section-title" style="text-align:left">Expertise</h2>${skillsHTML}</div>` : ''}
+  </div>` : ''}
+  ${data.projects?.length ? `<div class="proj-section"><h2 class="section-title">Selected Projects</h2><div class="proj-grid">${projHTML}</div></div>` : ''}
+  <footer><p>References available upon request</p></footer>
+</div>
+</body>
+</html>`;
 }
