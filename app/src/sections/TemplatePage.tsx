@@ -60,15 +60,15 @@ export function TemplatePage({
 
   // 根据语言获取分类名称
   const getCategoryName = (id: string) => {
-    const names: Record<string, Record<string, string>> = {
-      all: { zh: '全部', en: 'All' },
-      tech: { zh: '技术极客', en: 'Tech' },
-      design: { zh: '设计师', en: 'Design' },
-      business: { zh: '商务精英', en: 'Business' },
-      creative: { zh: '创意工作者', en: 'Creative' },
-      academic: { zh: '学术研究者', en: 'Academic' },
+    const keyMap: Record<string, string> = {
+      all: 'common.all',
+      tech: 'templates.category.tech',
+      design: 'templates.category.design',
+      business: 'templates.category.business',
+      creative: 'templates.category.creative',
+      academic: 'templates.category.academic',
     };
-    return names[id]?.[language] || names[id]?.zh || id;
+    return keyMap[id] ? t(keyMap[id]) : id;
   };
 
   const categories = [
@@ -140,7 +140,7 @@ export function TemplatePage({
                     className="border-stone-300"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    {language === 'en' ? 'Back' : '返回'}
+                    {t('common.back')}
                   </Button>
                 </motion.div>
                 <div>
@@ -176,7 +176,7 @@ export function TemplatePage({
                     className="bg-stone-700 hover:bg-stone-800 text-white"
                   >
                     <Check className="w-4 h-4 mr-2" />
-                    {language === 'en' ? 'Use This Template' : '使用此模板'}
+                    {t('template.select')}
                   </Button>
                 </motion.div>
               </div>
@@ -220,7 +220,7 @@ export function TemplatePage({
             whileHover={{ scale: 1.05 }}
           >
             <Palette className="w-4 h-4" />
-            <span>{language === 'en' ? '15+ Curated Templates' : '15+ 精选模板'}</span>
+            <span>{t('templateShowcase.badge')}</span>
           </motion.span>
           <motion.h1 
             className="text-4xl md:text-5xl font-bold text-stone-800 mb-4"
@@ -228,7 +228,7 @@ export function TemplatePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            {language === 'en' ? 'Find Your Style' : '找到属于你的风格'}
+            {t('templates.title')}
           </motion.h1>
           <motion.p 
             className="text-xl text-stone-500 max-w-2xl mx-auto"
@@ -236,9 +236,7 @@ export function TemplatePage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            {language === 'en' 
-              ? 'Pixel, doodle, minimal, cyberpunk... there\'s one that expresses you' 
-              : '像素风、涂鸦风、极简风、赛博朋克... 总有一款能表达你'}
+            {t('templates.subtitle')}
           </motion.p>
         </motion.div>
 
@@ -345,9 +343,9 @@ export function TemplatePage({
                             
                             {/* 简介文字 */}
                             <div className="space-y-1">
-                              <div className="h-2 w-full rounded bg-stone-200" />
-                              <div className="h-2 w-5/6 rounded bg-stone-200" />
-                              <div className="h-2 w-4/5 rounded bg-stone-200" />
+                              <div className="h-2 w-full rounded" style={{ backgroundColor: `${mutedPrimary}20` }} />
+                              <div className="h-2 w-5/6 rounded" style={{ backgroundColor: `${mutedPrimary}15` }} />
+                              <div className="h-2 w-4/5 rounded" style={{ backgroundColor: `${mutedSecondary}15` }} />
                             </div>
                             
                             {/* 技能标签 */}
@@ -373,19 +371,19 @@ export function TemplatePage({
                                   className="h-2 w-12 rounded mb-1"
                                   style={{ backgroundColor: mutedPrimary }}
                                 />
-                                <div className="h-1.5 w-full rounded bg-stone-200" />
-                                <div className="h-1.5 w-3/4 rounded bg-stone-200 mt-0.5" />
+                                <div className="h-1.5 w-full rounded" style={{ backgroundColor: `${mutedPrimary}18` }} />
+                                <div className="h-1.5 w-3/4 rounded mt-0.5" style={{ backgroundColor: `${mutedPrimary}12` }} />
                               </div>
-                              <div 
+                              <div
                                 className="h-14 rounded p-2"
                                 style={{ backgroundColor: `${mutedSecondary}12` }}
                               >
-                                <div 
+                                <div
                                   className="h-2 w-12 rounded mb-1"
                                   style={{ backgroundColor: mutedSecondary }}
                                 />
-                                <div className="h-1.5 w-full rounded bg-stone-200" />
-                                <div className="h-1.5 w-3/4 rounded bg-stone-200 mt-0.5" />
+                                <div className="h-1.5 w-full rounded" style={{ backgroundColor: `${mutedSecondary}18` }} />
+                                <div className="h-1.5 w-3/4 rounded mt-0.5" style={{ backgroundColor: `${mutedSecondary}12` }} />
                               </div>
                             </div>
                             
@@ -425,7 +423,7 @@ export function TemplatePage({
                                 className="bg-white text-stone-800 hover:bg-stone-100"
                               >
                                 <Eye className="w-4 h-4 mr-2" />
-                                {language === 'en' ? 'Preview' : '预览'}
+                                {t('template.preview')}
                               </Button>
                             </motion.div>
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -435,7 +433,7 @@ export function TemplatePage({
                                 className="bg-white/90 text-stone-800 hover:bg-white"
                               >
                                 <ExternalLink className="w-4 h-4 mr-2" />
-                                {language === 'en' ? 'View Example' : '查看示例'}
+                                {t('template.viewExample')}
                               </Button>
                             </motion.div>
                           </div>
@@ -496,7 +494,7 @@ export function TemplatePage({
                               onClick={() => handlePreview(template)}
                             >
                               <Eye className="w-4 h-4 mr-2" />
-                              {language === 'en' ? 'Preview' : '预览'}
+                              {t('template.preview')}
                             </Button>
                           </motion.div>
                           <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -511,12 +509,12 @@ export function TemplatePage({
                               {isSelected ? (
                                 <>
                                   <Check className="w-4 h-4 mr-2" />
-                                  {language === 'en' ? 'Selected' : '已选择'}
+                                  {t('template.selected')}
                                 </>
                               ) : (
                                 <>
                                   <Check className="w-4 h-4 mr-2" />
-                                  {language === 'en' ? 'Select' : '选择'}
+                                  {t('template.select')}
                                 </>
                               )}
                             </Button>
@@ -555,7 +553,7 @@ export function TemplatePage({
                   >
                     {resumeData
                       ? t('template.continue')
-                      : (language === 'en' ? 'Upload Resume First' : '先上传简历')}
+                      : t('hero.uploadResume')}
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </motion.div>
