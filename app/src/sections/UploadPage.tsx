@@ -111,11 +111,16 @@ export function UploadPage({ onNavigate, onResumeData }: UploadPageProps) {
           fileName: file.name,
         });
 
-        // Show warning for image-based PDFs
+        // Show warning for image-based PDFs or missing API key
         if (result.warning === 'image_pdf') {
           setUploadState((prev) => ({
             ...prev,
             error: t('upload.imagePdfWarning'),
+          }));
+        } else if (result.warning === 'no_api_key') {
+          setUploadState((prev) => ({
+            ...prev,
+            error: t('upload.noApiKeyWarning'),
           }));
         }
 
@@ -125,7 +130,7 @@ export function UploadPage({ onNavigate, onResumeData }: UploadPageProps) {
         // 延迟后跳转到模板选择页面
         setTimeout(() => {
           onNavigate('templates');
-        }, result.warning === 'image_pdf' ? 3000 : 1500);
+        }, result.warning ? 3000 : 1500);
       } else {
         setUploadState({
           status: 'error',

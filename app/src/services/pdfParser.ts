@@ -62,8 +62,9 @@ export async function parsePDFToText(
     const content = await page.getTextContent();
     const pageText = content.items
       .map((item: any) => ('str' in item ? item.str : ''))
-      .join(' ');
-    fullText += pageText + '\n';
+      .filter((s: string) => s.trim())
+      .join('\n');
+    fullText += pageText + '\n\n';
     onProgress?.(30 + Math.round((i / pdf.numPages) * 40));
   }
 
@@ -94,17 +95,22 @@ export async function parsePDF(
   try {
     // 检查 API Key — fallback to mock if missing
     const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || '';
+    console.log('[pdfParser] API key present:', !!apiKey);
     if (!apiKey) {
-      console.log('[pdfParser] No DeepSeek API key configured, using mock data');
-      return simulatePDFParsing(onProgress);
+      console.warn('[pdfParser] No DeepSeek API key configured, using sample data');
+      const mockResult = await simulatePDFParsing(onProgress);
+      if (mockResult.data) {
+        mockResult.warning = 'no_api_key';
+      }
+      return mockResult;
     }
 
     // Extract text from PDF
     const text = await parsePDFToText(file, onProgress);
+    console.log('[pdfParser] extracted text length:', text.length, 'preview:', text.slice(0, 200));
 
-    if (!text || text.length < 50) {
+    if (!text || text.length < 10) {
       // PDF has no text layer (scanned/image-based PDF)
-      // Fallback: use mock/sample data and show a helpful message
       console.warn('[pdfParser] PDF appears to be image-based (no text layer). Using sample data.');
       return {
         success: true,
@@ -117,6 +123,9 @@ export async function parsePDF(
 
     // Extract structured data via DeepSeek
     const result = await extractResumeFromText(text);
+    if (!result.success) {
+      console.error('[pdfParser] AI extraction failed:', result.error);
+    }
     onProgress?.(100);
     return result;
   } catch (error) {

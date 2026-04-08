@@ -271,7 +271,7 @@ export function TemplatePage({
         </motion.div>
 
         {/* Templates Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 ${selectedTemplate ? 'pb-24' : ''}`}>
           <AnimatePresence mode="wait">
             {filteredTemplates.map((template, index) => {
               const isSelected = selectedTemplate === template.id;
@@ -531,26 +531,38 @@ export function TemplatePage({
           </AnimatePresence>
         </div>
 
-        {/* Continue Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center"
-        >
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              size="lg"
-              onClick={handleContinue}
-              className="bg-stone-700 hover:bg-stone-800 text-white px-10 py-6 text-lg rounded-xl shadow-lg"
+        {/* Sticky Floating Action Bar */}
+        <AnimatePresence>
+          {selectedTemplate && (
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-stone-200 shadow-lg p-4"
             >
-              {resumeData
-                ? (language === 'en' ? 'Continue Editing' : '继续编辑')
-                : (language === 'en' ? 'Upload Resume First' : '先上传简历')}
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </motion.div>
-        </motion.div>
+              <div className="max-w-7xl mx-auto flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-stone-500">{t('template.selectedLabel')}:</span>
+                  <span className="font-semibold text-stone-800">
+                    {templatesV2.find(t => t.id === selectedTemplate)?.name || selectedTemplate}
+                  </span>
+                </div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    onClick={handleContinue}
+                    className="bg-stone-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-stone-700 transition-colors"
+                  >
+                    {resumeData
+                      ? t('template.continue')
+                      : (language === 'en' ? 'Upload Resume First' : '先上传简历')}
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

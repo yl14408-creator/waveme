@@ -139,7 +139,8 @@ const zhTranslations = {
   'upload.tips.edit': '解析完成后可以在编辑器中修改和调整内容',
   'upload.maxSize': '最大支持 10MB',
   'upload.imagePdfWarning': '您的 PDF 似乎是图片格式，我们已加载示例数据，请手动编辑您的信息。',
-  
+  'upload.noApiKeyWarning': '未配置 API 密钥，当前使用示例数据。请手动编辑您的信息。',
+
   // 隐私
   'privacy.title': '隐私保护',
   'privacy.slogan': '你的简历属于你，不属于 WaveMe',
@@ -292,6 +293,7 @@ const zhTranslations = {
   // Template Page
   'template.select': '选择',
   'template.selected': '已选择',
+  'template.selectedLabel': '已选择',
   'template.preview': '预览',
   'template.viewExample': '查看示例',
   'template.continue': '继续编辑',
@@ -726,7 +728,8 @@ const enTranslations: Record<string, string> = {
   'upload.tips.edit': 'You can edit and adjust content after parsing',
   'upload.maxSize': 'Max 10MB',
   'upload.imagePdfWarning': 'Your PDF appears to be image-based. We\'ve loaded sample data — please edit your information manually.',
-  
+  'upload.noApiKeyWarning': 'No API key configured — using sample data. Please edit your information manually.',
+
   // Privacy
   'privacy.title': 'Privacy Protection',
   'privacy.slogan': 'Your resume belongs to you, not WaveMe',
@@ -879,6 +882,7 @@ const enTranslations: Record<string, string> = {
   // Template Page
   'template.select': 'Select',
   'template.selected': 'Selected',
+  'template.selectedLabel': 'Selected',
   'template.preview': 'Preview',
   'template.viewExample': 'View Example',
   'template.continue': 'Continue Editing',

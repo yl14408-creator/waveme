@@ -393,60 +393,106 @@ const TemplateShowcase = ({ onNavigate }: { onNavigate: (page: string) => void }
                     whileHover={{ opacity: 1.5 }}
                   />
                   
-                  {/* 网站预览样式 - 更真实的展示 */}
-                  <div className="absolute inset-4 bg-white rounded-lg shadow-sm overflow-hidden border border-stone-100">
+                  {/* 网站预览样式 - 真实模板色彩展示 */}
+                  <div className="absolute inset-4 rounded-lg shadow-sm overflow-hidden border border-stone-100"
+                    style={{ backgroundColor: template.colors.background }}
+                  >
                     {/* 浏览器头部 */}
-                    <div className="h-6 bg-stone-100 flex items-center px-2 gap-1">
+                    <div
+                      className="h-6 flex items-center px-2 gap-1"
+                      style={{ background: `linear-gradient(to right, ${template.colors.primary}, ${template.colors.secondary})` }}
+                    >
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 rounded-full bg-stone-300" />
-                        <div className="w-2 h-2 rounded-full bg-stone-300" />
-                        <div className="w-2 h-2 rounded-full bg-stone-300" />
+                        <div className="w-2 h-2 rounded-full bg-white/40" />
+                        <div className="w-2 h-2 rounded-full bg-white/40" />
+                        <div className="w-2 h-2 rounded-full bg-white/40" />
                       </div>
                       <div className="flex-1 mx-2">
-                        <div className="h-3 bg-stone-200 rounded text-[6px] flex items-center justify-center text-stone-400">
+                        <div className="h-3 bg-white/20 rounded text-[6px] flex items-center justify-center text-white/70 font-mono">
                           {template.name.toLowerCase().replace(/\s+/g, '')}.com
                         </div>
                       </div>
                     </div>
                     {/* 网站内容预览 */}
-                    <div className="p-2 space-y-1.5">
-                      <div 
-                        className="h-6 rounded flex items-center px-2 gap-2"
-                        style={{ backgroundColor: `${template.colors.primary}08` }}
-                      >
-                        <div 
-                          className="w-4 h-4 rounded-full"
+                    <div className="p-2.5 space-y-2">
+                      {/* Hero区域 - 头像和名字 */}
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-6 h-6 rounded-full shadow-sm"
                           style={{ backgroundColor: template.colors.primary }}
                         />
-                        <div className="flex-1 space-y-0.5">
-                          <div 
-                            className="h-1.5 w-10 rounded"
+                        <div className="flex-1 space-y-1">
+                          <div
+                            className="h-2 w-14 rounded"
                             style={{ backgroundColor: template.colors.primary }}
                           />
-                          <div 
-                            className="h-1 w-6 rounded"
-                            style={{ backgroundColor: `${template.colors.secondary}40` }}
+                          <div
+                            className="h-1.5 w-10 rounded"
+                            style={{ backgroundColor: `${template.colors.secondary}80` }}
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-3 gap-1">
-                        <div className="col-span-2 space-y-1">
-                          <div className="h-1.5 w-full rounded bg-stone-200" />
-                          <div className="h-1.5 w-4/5 rounded bg-stone-200" />
-                        </div>
-                        <div 
-                          className="h-8 rounded"
-                          style={{ backgroundColor: `${template.colors.secondary}10` }}
-                        />
+
+                      {/* 简介文字 */}
+                      <div className="space-y-0.5">
+                        <div className="h-1.5 w-full rounded" style={{ backgroundColor: `${template.colors.text}20` }} />
+                        <div className="h-1.5 w-5/6 rounded" style={{ backgroundColor: `${template.colors.text}15` }} />
                       </div>
+
+                      {/* 技能标签 */}
                       <div className="flex flex-wrap gap-1">
-                        {[1,2,3].map(i => (
-                          <div 
+                        {['Skill', 'Tag', 'More'].map((tag, i) => (
+                          <div
                             key={i}
-                            className="h-3 w-6 rounded"
-                            style={{ backgroundColor: `${template.colors.accent || template.colors.primary}15` }}
-                          />
+                            className="px-1.5 py-0.5 rounded text-[5px] font-medium text-white"
+                            style={{ backgroundColor: i % 2 === 0 ? template.colors.primary : template.colors.secondary }}
+                          >
+                            {tag}
+                          </div>
                         ))}
+                      </div>
+
+                      {/* 项目卡片 */}
+                      <div className="grid grid-cols-2 gap-1">
+                        <div
+                          className="h-8 rounded p-1.5"
+                          style={{ backgroundColor: `${template.colors.primary}18` }}
+                        >
+                          <div
+                            className="h-1.5 w-8 rounded mb-0.5"
+                            style={{ backgroundColor: template.colors.primary }}
+                          />
+                          <div className="h-1 w-full rounded" style={{ backgroundColor: `${template.colors.text}12` }} />
+                        </div>
+                        <div
+                          className="h-8 rounded p-1.5"
+                          style={{ backgroundColor: `${template.colors.secondary}18` }}
+                        >
+                          <div
+                            className="h-1.5 w-8 rounded mb-0.5"
+                            style={{ backgroundColor: template.colors.secondary }}
+                          />
+                          <div className="h-1 w-full rounded" style={{ backgroundColor: `${template.colors.text}12` }} />
+                        </div>
+                      </div>
+
+                      {/* 底部CTA按钮 */}
+                      <div className="flex gap-1">
+                        <div
+                          className="flex-1 h-4 rounded flex items-center justify-center"
+                          style={{ backgroundColor: template.colors.primary }}
+                        >
+                          <div className="h-1 w-8 rounded bg-white/40" />
+                        </div>
+                        <div
+                          className="flex-1 h-4 rounded flex items-center justify-center border"
+                          style={{ borderColor: template.colors.secondary }}
+                        >
+                          <div
+                            className="h-1 w-8 rounded"
+                            style={{ backgroundColor: `${template.colors.secondary}60` }}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
